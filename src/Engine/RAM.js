@@ -36,3 +36,27 @@ export function create() {
 		dr: 0,
 	};
 }
+
+/**
+ * Executes one RAM cycle, returning the new state.
+ *
+ * @param   {RAM} state
+ * @returns {RAM}
+ */
+export function cycle(state) {
+	return { ...state };
+}
+
+/**
+ * Returns an overview of the state of a RAM as text.
+ *
+ * @param   {RAM} state
+ * @returns {String}
+ */
+export function toString(state) {
+	const rst = state.rst? 'yes' : 'no';
+	const read = state.read? 'yes' : 'no';
+	const write = state.write? 'yes' : 'no';
+	const {ar, dr} = state;
+	return `RAM RST:${rst} READ:${read} WRITE:${write} AR:${ar} DR:${dr}`;
+}

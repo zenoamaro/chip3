@@ -31,3 +31,29 @@ export function create() {
 		cycle: 1,
 	};
 }
+
+/**
+ * Executes one system cycle by cycling CPU and RAM, and returning the
+ * new state.
+ *
+ * @param   {System} state
+ * @returns {System}
+ */
+export function cycle(state) {
+	return {
+		cpu: CPU.cycle(state.cpu),
+		ram: RAM.cycle(state.ram),
+		cycle: state.cycle +1,
+	};
+}
+
+/**
+ * Returns an overview of the state of a System as text.
+ *
+ * @param   {System} state
+ * @returns {String}
+ */
+export function toString(state) {
+	return `${state.cycle}\t${CPU.toString(state.cpu)}\n`
+	     + `\t${RAM.toString(state.ram)}`;
+}
