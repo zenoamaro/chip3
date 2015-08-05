@@ -1,0 +1,10 @@
+/node_modules
+
+*~
+~*
+tmp
+*.tmp
+*.log
+*.bak
+*.orig
+.DS_Store

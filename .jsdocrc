@@ -1,0 +1,35 @@
+{
+
+	"source": {
+		"include": ["./README.md", "./src"],
+		"includePattern": ".+\\.js(doc)?$",
+		"excludePattern": "(^|\\/|\\\\)_"
+	},
+
+	"tags": {
+		"allowUnknownTags": true
+	},
+
+	"opts": {
+		"recurse": true,
+		"destination": "./docs/"
+	},
+
+	"templates": {
+		"cleverLinks": true,
+		"monospaceLinks": false
+	},
+
+	"plugins": [
+		"plugins/markdown",
+		"node_modules/jsdoc-babel"
+	],
+
+	"babel": {
+		"extensions": ["js", "jsx"],
+		"stage": 0,
+		"compact": false,
+		"comments": true
+	}
+
+}
