@@ -68,12 +68,30 @@ export function cycle(state) {
 export const phases = {
 	fetch1,
 	fetch2,
+	add1,
+	add2,
+	and1,
+	and2,
+	jmp1,
+	inc1,
+};
+
+/**
+ * A map between the opcodes supported by this CPU and the phase
+ * transition that handles their execution.
+ *
+ * @type {Object}
+ */
+export const opcodes = {
+	0b000: 'add1', /* ADD X - Adds X to A       */
+	0b001: 'and1', /* AND X - ANDs X and A      */
+	0b010: 'jmp1', /* JMP X - Jumps to X        */
+	0b011: 'inc1', /* INC   - Increments A by 1 */
 };
 
 /**
  * First step of the instruction fetch phase. Asks for a memory read
- * at the program counter address on the address register, and
- * transitions to next fetch step.
+ * at the program counter address on the address register.
  *
  * @method  fetch1
  * @param   {CPU} state
@@ -89,8 +107,9 @@ export function fetch1(state) {
 
 /**
  * Second step of the instruction fetch phase. Reads the data from
- * memory into the instruction and address registers, then
- * increments the program counter.
+ * memory into the instruction and address registers, then increments
+ * the program counter. Will transition to the opcode handler, or
+ * restart the fetch cycle if the opcode is invalid.
  *
  * @param   {CPU} state
  * @returns {CPU}
@@ -98,11 +117,96 @@ export function fetch1(state) {
 export function fetch2(state) {
 	const ir = (state.dr & 0b11100000) >> 5;
 	const ar = (state.dr & 0b00011111) >> 0;
+	const next = opcodes[ir] || 'fetch1';
 	return {
-		ir, ar,
+		next, ir, ar,
+		read: false,
+		pc: state.pc + 1,
+	};
+}
+
+/**
+ * First step of the addition operation. Asks for a memory read at the
+ * address register, and transitions to next add step.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function add1(state) {
+	return {
+		ar: state.ar,
+		read: true,
+		next: 'add2',
+	};
+}
+
+/**
+ * Second step of the addition operation. Reads the data from memory
+ * and adds it to the accumulator.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function add2(state) {
+	return {
+		a: (state.a + state.dr) % 255,
 		read: false,
 		next: 'fetch1',
-		pc: state.pc + 1,
+	};
+}
+
+/**
+ * First step of the bitwise AND operation. Asks for a memory read at the
+ * address register.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function and1(state) {
+	return {
+		read: true,
+		next: 'and2',
+	};
+}
+
+/**
+ * Second step of the bitwise AND operation. Reads the data from memory
+ * and bitwise ANDs it to the accumulator.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function and2(state) {
+	return {
+		a: (state.a & state.dr) % 255,
+		read: false,
+		next: 'fetch1',
+	};
+}
+
+/**
+ * Points the program counter to the address in the address register.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function jmp1(state) {
+	return {
+		pc: state.dr & 0b00011111,
+		next: 'fetch1',
+	};
+}
+
+/**
+ * Increments the accumulator by 1.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+function inc1(state) {
+	return {
+		a: state.a + 1,
+		next: 'fetch1',
 	};
 }
 
