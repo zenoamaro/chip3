@@ -44,7 +44,41 @@ export function create() {
  * @returns {RAM}
  */
 export function cycle(state) {
-	return { ...state };
+	var receiver;
+	switch (true) {
+		case state.rst:   receiver = create; break;
+		case state.read:  receiver = read; break;
+		case state.write: receiver = write; break;
+		default:          return { ...state };
+	}
+	return { ...state, ...receiver(state) };
+}
+
+/**
+ * Reads the memory location pointed by the address register, and
+ * produces its contents on the data register.
+ *
+ * @param   {RAM} state
+ * @returns {RAM}
+ */
+function read(state) {
+	const ar = state.ar;
+	const dr = state.data[ar] || 0;
+	return { ar, dr };
+}
+
+/**
+ * Writes the contents of the data register to the memory location
+ * pointed by the address register.
+ *
+ * @param   {RAM} state
+ * @returns {RAM}
+ */
+function write(state) {
+	const {ar, dr} = state;
+	var data = state.data.slice();
+	data[ar] = dr; // This ruins my feng shui
+	return { data };
 }
 
 /**
