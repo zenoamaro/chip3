@@ -5,4 +5,5 @@
  * @module Chip3
  */
 
-export * as Engine from 'Engine';
+export * as Engine from './Engine';
+export * as Workbench from './Workbench';

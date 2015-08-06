@@ -21,6 +21,8 @@ module.exports = {
 
 	module: {
 		loaders: [
+			{ test:/src\/Workbench.*\.(png|svg|html)$/,
+			  loader:'file?context=./src/Workbench&name=[path][name].[ext]' },
 			{ test:/\.jsx?$/, loader:'babel', include:d('src') },
 		],
 	},
