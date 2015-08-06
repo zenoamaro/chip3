@@ -31,7 +31,7 @@ export function create() {
 		read: false,
 		write: false,
 		size: 0b100000,
-		data: new Array(0b100000),
+		data: new Array(0b100000).fill(0),
 		ar: 0,
 		dr: 0,
 	};
@@ -63,7 +63,7 @@ export function cycle(state) {
  */
 function read(state) {
 	const ar = state.ar;
-	const dr = state.data[ar] || 0;
+	const dr = state.data[ar];
 	return { ar, dr };
 }
 
