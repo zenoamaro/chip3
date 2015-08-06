@@ -217,9 +217,9 @@ function inc1(state) {
  * @returns {String}
  */
 export function toString(state) {
-	const rst = state.rst? 'yes' : 'no';
-	const read = state.read? 'yes' : 'no';
-	const write = state.write? 'yes' : 'no';
+	const rst = state.rst? 'on' : 'off';
+	const read = state.read? 'on' : 'off';
+	const write = state.write? 'on' : 'off';
 	const {phase, next, a, dr, ir, ar, pc} = state;
 	return `CPU ${phase}->${next} RST:${rst} READ:${read} WRITE:${write} `
 	     + `A:${a} AR:${ar} DR:${dr} IR:${ir} PC:${pc}`;
