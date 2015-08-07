@@ -40,9 +40,9 @@ export default class Layout extends Component {
 
 	computeStyle() {
 		return {
-			flexGrow: this.props.size? 0 : this.props.flex,
-			flexShrink: this.props.size? 0 : this.props.flex,
-			flexBasis: this.props.size? this.props.size : 'auto',
+			flexGrow:   this.props.size? 0 : this.props.flex,
+			flexShrink: this.props.size? 1 : this.props.flex,
+			flexBasis:  this.props.size? this.props.size : 'auto',
 			flexDirection:  Layout.stylePropMap[this.props.dir],
 			alignItems:     Layout.stylePropMap[this.props.align],
 			justifyContent: Layout.stylePropMap[this.props.justify],
