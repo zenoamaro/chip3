@@ -15,6 +15,7 @@ export default class RAM extends Component {
 	static style = {
 		row: {
 			color: '#bbb',
+			padding: '0 1rem',
 			borderBottom: 'solid thin #ddd',
 			fontFamily: 'lucida console, monospace',
 		},
@@ -28,24 +29,21 @@ export default class RAM extends Component {
 			background: '#ffefed',
 		},
 		cell: {
-			padding: '.93rem 1rem .7rem',
-			textAlign: 'center',
+			flexBasis: 50,
+			margin: '0 1rem',
+			padding: '.93rem 0 .7rem',
 		},
-		addr: {
-			flexBasis: 70,
-			textAlign: 'right',
-			borderRight: 'solid thin rgba(0, 0, 0, .14)',
-		},
-		val: {
-			flexBasis: 70,
-			borderRight: 'solid thin rgba(0, 0, 0, .14)',
-		},
-		dim: {
-			color: '#bbb',
-		},
+		addr: {},
+		val: {},
 		bits: {
+			flexBasis: 'auto',
 			flexGrow: 1,
 			flexShrink: 0,
+			textAlign: 'center',
+		},
+		reg: {
+			flexBasis: 35,
+			textAlign: 'right',
 		},
 		read: {
 			color: '#0099ff',
@@ -55,13 +53,9 @@ export default class RAM extends Component {
 		},
 		ar: {
 			color: '#0099ff',
-			flexBasis: 70,
-			borderLeft: 'solid thin rgba(0, 0, 0, .14)',
 		},
 		pc: {
 			color: '#e94c3d',
-			flexBasis: 70,
-			borderLeft: 'solid thin rgba(0, 0, 0, .14)',
 		},
 	}
 
@@ -87,12 +81,12 @@ export default class RAM extends Component {
 			...((i===ram.ar || i===pc) && style.currentRow),
 		};
 		const activityStyle = {
-			...style.ar,
+			...style.reg,
 			...(ram.read && style.read),
 			...(ram.write && style.write),
 		};
 		return (
-			<Layout key={i} dir='horizontal'style={rowStyle}>
+			<Layout key={i} dir='horizontal' style={rowStyle}>
 				{this.renderCell({
 					style: style.addr,
 					hint: `Address - ${byteFormats(i)}`,
@@ -109,11 +103,11 @@ export default class RAM extends Component {
 					hint: 'Read/write activity',
 					value: activity })}
 				{this.renderCell({
-					style: style.ar,
+					style: {...style.reg, ...style.ar},
 					hint: 'Address Register',
 					value: ram.ar === i && '<AR' })}
 				{this.renderCell({
-					style: style.pc,
+					style: {...style.reg, ...style.pc},
 					hint: 'Program Counter',
 					value: pc === i && '<PC' })}
 			</Layout>
