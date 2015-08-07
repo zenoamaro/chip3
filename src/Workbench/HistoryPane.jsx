@@ -27,7 +27,7 @@ export default class CPU extends Component {
 
 	render() {
 		return (
-			<Layout size={350} style={this.style.pane}>
+			<Layout size={275} style={this.style.pane}>
 				<div>
 					{this.props.history.map(::this.renderRow)}
 				</div>

@@ -38,7 +38,7 @@ export default class CPU extends Component {
 	render() {
 		const cpu = this.props.cpu;
 		return (
-			<Layout size={350} style={this.style.pane}>
+			<Layout size={275} style={this.style.pane}>
 				<div>
 					{this.renderProp({
 						label: 'Phase',
