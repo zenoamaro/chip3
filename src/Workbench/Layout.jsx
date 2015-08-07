@@ -12,6 +12,7 @@ export default class Layout extends Component {
 		align: T.oneOf([ 'start', 'end', 'center', 'stretch' ]),
 		justify: T.oneOf([ 'start', 'center', 'end', 'between', 'around' ]),
 		children: T.node,
+		title: T.string,
 	}
 
 	static defaultProps = {
@@ -50,7 +51,8 @@ export default class Layout extends Component {
 
 	render() {
 		return (
-			<div style={this.style}>
+			<div style={this.style}
+			     title={this.props.title}>
 				{this.props.children}
 			</div>
 		);

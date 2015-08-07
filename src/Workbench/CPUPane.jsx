@@ -2,6 +2,7 @@ import React from 'react';
 import {PropTypes as T} from 'react';
 import Component from './Component';
 import Layout from './Layout';
+import {hexString, byteFormats} from './utils';
 
 
 export default class CPU extends Component {
@@ -14,9 +15,23 @@ export default class CPU extends Component {
 		pane: {
 			borderLeft: 'solid thin #bbb',
 		},
-		row: {
+		prop: {
 			padding: '.7rem 1rem',
 			borderBottom: 'solid thin #ddd',
+		},
+		dim: {
+			color: '#bbb',
+		},
+		propLabel: {
+			flexBasis: 50,
+			color: '#bbb',
+			marginRight: '1rem',
+			textAlign: 'right',
+		},
+		propValue: {
+			fontFamily: 'lucida console, monospace',
+			marginTop: '.2rem',
+			marginRight: '1rem',
 		},
 	}
 
@@ -25,25 +40,75 @@ export default class CPU extends Component {
 		return (
 			<Layout size={350} style={this.style.pane}>
 				<div>
-					{this.renderRow(`${cpu.phase} -> ${cpu.next}`)}
-					{this.renderRow(`RST: ${cpu.rst? 'on' : 'off'}`)}
-					{this.renderRow(`READ: ${cpu.read? 'on' : 'off'}`)}
-					{this.renderRow(`WRITE: ${cpu.write? 'on' : 'off'}`)}
-					{this.renderRow(`A: ${cpu.a}`)}
-					{this.renderRow(`DR: ${cpu.dr}`)}
-					{this.renderRow(`IR: ${cpu.ir}`)}
-					{this.renderRow(`AR: ${cpu.ar}`)}
-					{this.renderRow(`PC: ${cpu.pc}`)}
+					{this.renderProp({
+						label: 'Phase',
+						hint: 'Current and next phase',
+						value: `${cpu.phase} -> ${cpu.next}` })}
+					{this.renderProp({
+						label: 'RST',
+						hint: 'Reset flag',
+						value: cpu.rst })}
+					{this.renderProp({
+						label: 'READ',
+						hint: 'Memory read flag',
+						value: cpu.read })}
+					{this.renderProp({
+						label: 'WRITE',
+						hint: 'Memory write flag',
+						value: cpu.write })}
+					{this.renderProp({
+						label: 'A',
+						hint: 'Accumulator',
+						value: cpu.a })}
+					{this.renderProp({
+						label: 'DR',
+						hint: 'Data Register',
+						value: cpu.dr })}
+					{this.renderProp({
+						label: 'IR',
+						hint: 'Instruction Register',
+						value: cpu.ir })}
+					{this.renderProp({
+						label: 'AR',
+						hint: 'Address Register',
+						value: cpu.ar })}
+					{this.renderProp({
+						label: 'PC',
+						hint: 'Program Counter',
+						value: cpu.pc })}
 				</div>
 			</Layout>
 		);
 	}
 
-	renderRow(contents) {
+	renderProp(prop) {
+		const {style} = this;
+		const {label, value} = prop;
+		const hint = typeof value === 'number'
+			? `${prop.hint} - ${byteFormats(value)}`
+			: prop.hint;
 		return (
-			<div style={this.style.row}>
-				{contents}
-			</div>
+			<Layout dir='horizontal' justify='start'
+			        title={hint} style={style.prop}>
+				<div style={style.propLabel}>
+					{label}
+				</div>
+				{typeof value === 'string' && (
+					<div style={style.propValue}>
+						{value}
+					</div>
+				)}
+				{typeof value === 'boolean' && (
+					<div style={{...style.propValue, ...(!value&&style.dim)}}>
+						{value? 'ON' : 'OFF'}
+					</div>
+				)}
+				{typeof value === 'number' && (
+					<div style={style.propValue}>
+						{hexString(value)}
+					</div>
+				)}
+			</Layout>
 		);
 	}
 
