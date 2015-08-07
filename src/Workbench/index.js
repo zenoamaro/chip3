@@ -1,7 +1,7 @@
 /**
- * A graphical interface to the Chip3 engine.
+ * A graphical inspector for the Chip3 engine.
  *
- * @module GUI
+ * @module Workbench
  */
 
 export App from './App';
