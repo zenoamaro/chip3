@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Chip3 Workbench</title>
+	<meta name="language" content="en">
+	<meta name="author" content="zenoamaro@gmail.com">
+	<meta name="description" content="Chip3 is an interactive emulator of a simple computer for educational purposes.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		* { box-sizing:border-box }
+		html { font-family:-webkit-system-font,sans-serif; font-size:13px;
+		       text-rendering: optimizeLegibility; color:#333 }
+		body { margin: 0 }
+		input, button { color:inherit; font-family:inherit; font-size:inherit }
+	</style>
+</head>
+<body>
+	<!-- Fork me on Github banner -->
+	<a href="https://github.com/zenoamaro/chip3">
+		<img alt="Fork me on GitHub"
+		     style="position:absolute; top:0; right:0; border:0; z-index:10; width:120px"
+		     data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"
+		     src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67">
+	</a>
+    <!-- App container, scripts and bootstrap -->
+	<div id="workbench">Loading...</div>
+	<script src="chip3.js"></script>
+	<script>(function(){
+
+Chip3.Workbench.App.bootstrap('#workbench', {
+	program: [
+		/*
+		Bouncy bits
+		-----------
+		This program bounces a single bit inside the accumulator to the
+		left and to the right, changing direction whenever it hits the
+		bounds of the register.
+		*/
+
+		/* 00000 */ 0b00110001, // init:    LD <current>
+		/* 00001 */ 0b11100000, // output:  OUT
+		/* 00010 */ 0b10010010, // bounds:  AND <first_last>
+		/* 00011 */ 0b11000111, //          JZ [move]
+		/* 00100 */ 0b00110000, // reverse: LD <direction>
+		/* 00101 */ 0b00000010, //          NOT
+		/* 00110 */ 0b01010000, //          ST <direction>
+		/* 00111 */ 0b00110000, // move:    LD <direction>
+		/* 01000 */ 0b11001100, //          JZ [right]
+		/* 01001 */ 0b00110001, // left:    LD <current>
+		/* 01010 */ 0b00001000, //          ROL
+		/* 01011 */ 0b10101110, //          JMP [store]
+		/* 01100 */ 0b00110001, // right:   LD <current>
+		/* 01101 */ 0b00010000, //          ROR
+		/* 01110 */ 0b01010001, // store:   ST <current>
+		/* 01111 */ 0b10100001, //          JMP output
+		/* 10000 */ 0b11111111, // data:    DATA <direction> 255
+		/* 10001 */ 0b10000000, //          DATA <current> 128
+		/* 10010 */ 0b10000001, //          DATA <first_last> 129
+	]
+});
+
+	})(this)</script>
+</body>
+</html>
