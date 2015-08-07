@@ -14,6 +14,7 @@ export default class CPU extends Component {
 
 	static style = {
 		pane: {
+			background: '#f6f6f6',
 			borderRight: 'solid thin #bbb',
 		},
 		row: {
@@ -21,7 +22,8 @@ export default class CPU extends Component {
 			borderBottom: 'solid thin #ddd',
 		},
 		rowActive: {
-			background: '#f6f6f6'
+			fontWeight: 'bold',
+			background: '#eee',
 		},
 	}
 

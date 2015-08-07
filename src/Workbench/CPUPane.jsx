@@ -13,6 +13,7 @@ export default class CPU extends Component {
 
 	static style = {
 		pane: {
+			background: '#f6f6f6',
 			borderLeft: 'solid thin #bbb',
 		},
 		prop: {
