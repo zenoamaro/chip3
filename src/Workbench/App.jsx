@@ -24,7 +24,7 @@ export default class App extends Component {
 		const system = System.create();
 		system.ram.data[0b00000] = 0b01100000; /* INC   */
 		system.ram.data[0b00001] = 0b01000000; /* JMP 0 */
-		this.pushSnapshot(system);
+		this.replaceHistory([system]);
 	}
 
 	cycleSystem = () => {
@@ -50,6 +50,10 @@ export default class App extends Component {
 		const history = this.state.history
 			.slice(0, current+1)
 			.concat(state);
+		this.replaceHistory(history);
+	}
+
+	replaceHistory(history) {
 		this.setState({ history, currentSnapshot:history.length-1 });
 	}
 
@@ -65,7 +69,8 @@ export default class App extends Component {
 		const system = this.getCurrentSnapshot();
 		return (
 			<Layout dir='vertical' style={this.style}>
-				<Toolbar onCycle={this.cycleSystem}/>
+				<Toolbar onCycle={this.cycleSystem}
+				         onReset={this.createSystem}/>
 				<Layout dir='horizontal'>
 					<HistoryPane history={history}
 					             current={current}

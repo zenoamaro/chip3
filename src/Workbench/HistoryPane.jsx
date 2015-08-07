@@ -29,7 +29,7 @@ export default class CPU extends Component {
 		return (
 			<Layout size={350} style={this.style.pane}>
 				<div>
-					{this.props.history.map(::this.renderRow).reverse()}
+					{this.props.history.map(::this.renderRow)}
 				</div>
 			</Layout>
 		);

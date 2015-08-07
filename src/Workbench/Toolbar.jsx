@@ -9,6 +9,7 @@ export default class Toolbar extends Component {
 
 	static propTypes = {
 		onCycle: T.func,
+		onReset: T.func,
 	}
 
 	static style = {
@@ -23,9 +24,8 @@ export default class Toolbar extends Component {
 			<header style={this.style}>
 				<Layout dir='horizontal' align='center' justify='between'>
 					<div>
-						<Button onClick={this.props.onCycle}>
-							Cycle
-						</Button>
+						<Button onClick={this.props.onCycle}>Cycle</Button>
+						<Button onClick={this.props.onReset}>Reset</Button>
 					</div>
 				</Layout>
 			</header>
