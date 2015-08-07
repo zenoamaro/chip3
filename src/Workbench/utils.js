@@ -6,6 +6,18 @@
 
 
 /**
+ * Clamps a value inside the given bounds, inclusive.
+ *
+ * @param    {Number} min
+ * @param    {Number} x
+ * @param    {Number} max
+ * @returns  {Number}
+ */
+export function clamp(min, x, max) {
+	return Math.max(min, Math.min(x, max));
+}
+
+/**
  * Converts a byte to an array of bits.
  *
  * @method  bitArray
