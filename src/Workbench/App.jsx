@@ -1,4 +1,5 @@
 import React from 'react';
+import {PropTypes as T} from 'react';
 import Component from './Component';
 import Toolbar from './Toolbar';
 import Layout from './Layout';
@@ -11,6 +12,14 @@ import {clamp} from './utils';
 
 export default class App extends Component {
 
+	static propTypes = {
+		program: T.array,
+	}
+
+	static defaultProps = {
+		program: [],
+	}
+
 	state = {
 		history: [],
 		currentSnapshot: 0,
@@ -22,8 +31,10 @@ export default class App extends Component {
 
 	createSystem = () => {
 		const system = System.create();
-		system.ram.data[0b00000] = 0b01100000; /* INC   */
-		system.ram.data[0b00001] = 0b01000000; /* JMP 0 */
+		const {data} = system.ram;
+		const {program} = this.props;
+		// Load program into memory
+		system.ram.data = data.map((word, i) => program[i] || word);
 		this.replaceHistory([system]);
 	}
 
@@ -83,9 +94,9 @@ export default class App extends Component {
 		);
 	}
 
-	static bootstrap(selector) {
+	static bootstrap(selector, props) {
 		const $element = document.querySelector(selector);
-		return React.render(<App/>, $element);
+		return React.render(<App {...props}/>, $element);
 	}
 
 }
