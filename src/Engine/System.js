@@ -12,9 +12,9 @@ import * as RAM from './RAM';
  * A system in a virgin state.
  *
  * @typedef  {Object} System
- * @property {RAM}    ram
- * @property {CPU}    cpu
- * @property {Number} cycle
+ * @property {RAM}    ram     - RAM component
+ * @property {CPU}    cpu     - CPU component
+ * @property {Number} cycle   - Current cycle number
  */
 
 

@@ -9,16 +9,16 @@
  * A CPU in a virgin state.
  *
  * @typedef  {Object}  CPU
- * @property {String}  phase
- * @property {String}  next
- * @property {Boolean} rst
- * @property {Boolean} read
- * @property {Boolean} write
- * @property {Number}  a
- * @property {Number}  dr
- * @property {Number}  ir
- * @property {Number}  ar
- * @property {Number}  pc
+ * @property {String}  phase - Current phase of execution
+ * @property {String}  next  - Next phase to be executed
+ * @property {Boolean} rst   - Reset flag
+ * @property {Boolean} read  - Read request flag
+ * @property {Boolean} write - Write request flag
+ * @property {Number}  a     - Accumulator
+ * @property {Number}  dr    - Data register
+ * @property {Number}  ir    - Instruction register
+ * @property {Number}  ar    - Address register
+ * @property {Number}  pc    - Program counter
  */
 
 

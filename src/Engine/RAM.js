@@ -9,13 +9,13 @@
  * A block of random-access memory.
  *
  * @typedef  {Object}   RAM
- * @property {Boolean}  rst
- * @property {Boolean}  read
- * @property {Boolean}  write
- * @property {Number}   size
- * @property {Array}    data
- * @property {Number}   ar
- * @property {Number}   dr
+ * @property {Boolean}  rst   - Reset flag
+ * @property {Boolean}  read  - Read request flag
+ * @property {Boolean}  write - Write request flag
+ * @property {Number}   size  - Size of memory in words
+ * @property {Array}    data  - Memory locations
+ * @property {Number}   ar    - Address register
+ * @property {Number}   dr    - Data register
  */
 
 
