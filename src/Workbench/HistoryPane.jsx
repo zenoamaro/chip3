@@ -31,7 +31,7 @@ export default class CPU extends Component {
 		return (
 			<Layout size={275} style={this.style.pane}>
 				<div>
-					{this.props.history.map(::this.renderRow)}
+					{this.props.history.map(::this.renderRow).reverse()}
 				</div>
 			</Layout>
 		);
@@ -41,7 +41,7 @@ export default class CPU extends Component {
 		const active = i === this.props.current;
 		const style = { ...this.style.row, ...(active&&this.style.rowActive) };
 		return (
-			<div key={i} style={style}
+			<div key={snapshot.cycle} style={style}
 			     onClick={() => this.props.onSelect(i)}>
 				Clock cycle {snapshot.cycle} - {snapshot.cpu.phase}
 			</div>
