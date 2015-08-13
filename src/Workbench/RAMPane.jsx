@@ -132,11 +132,15 @@ export default class RAM extends Component {
 	disassembled(word) {
 		const {opcode, ar} = CPU.decode(word);
 		const {mnemonic, operands} = opcode;
-		const opType = operands[0];
-		var operand = '';
-		if      (opType === 'address')  operand = `[${bitString(ar, 5)}]`;
-		else if (opType === 'operator') operand = `${bitString(ar, 5)}`;
-		return [mnemonic, operand].join(' ');
+		switch (operands[0]) {
+			case 'address':
+				return `${mnemonic} [${bitString(ar, 5)}]`;
+			case 'operator':
+				let operators = CPU.decodeOperator(ar);
+				return operators.map(o => o.mnemonic).join(' ');
+			default:
+				return mnemonic;
+		}
 	}
 
 }
