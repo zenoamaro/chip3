@@ -8,12 +8,12 @@
 /**
  * Clamps a value inside the given bounds, inclusive.
  *
- * @param    {Number} min
+ * @param    {Number} [min=0]
  * @param    {Number} x
- * @param    {Number} max
+ * @param    {Number} [max=Infinity]
  * @returns  {Number}
  */
-export function clamp(min, x, max) {
+export function clamp(min=0, x, max=Infinity) {
 	return Math.max(min, Math.min(x, max));
 }
 
