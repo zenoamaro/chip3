@@ -109,10 +109,19 @@ export const opcodes = [
 ];
 
 /**
- * A map between the operators supported by the OPR instruction and the
- * phase transitions that handle their execution. All operators whose
- * flag is expressed will run in the same cycle and in the same order as
- * they are presented here.
+ * A description of an operator.
+ *
+ * @typedef  {Object}  Opcode
+ * @property {Number}  code     - Flag activating this operator
+ * @property {String}  mnemonic - Next phase to be executed
+ * @property {String}  phase    - CPU phase that handles this operator
+ */
+
+/**
+ * Specifications for all opcodes supported by the CPU.
+ *
+ * All operators whose flag is expressed will run in the same cycle and
+ * in the same order as they are presented here.
  *
  * | Operator | Mnemonic | Function                     |
  * |----------|----------|------------------------------|
@@ -122,13 +131,13 @@ export const opcodes = [
  * | 01000    | ROL      | Rotate accumulator left      |
  * | 10000    | ROR      | Rotate accumulator right     |
  */
-export const operators = {
-	0b00001: 'CLR',
-	0b00010: 'NOT',
-	0b00100: 'INC',
-	0b01000: 'ROL',
-	0b10000: 'ROR',
-};
+export const operators = [
+	{ code:0b00001, mnemonic:'CLR', phase:'CLR' },
+	{ code:0b00010, mnemonic:'NOT', phase:'NOT' },
+	{ code:0b00100, mnemonic:'INC', phase:'INC' },
+	{ code:0b01000, mnemonic:'ROL', phase:'ROL' },
+	{ code:0b10000, mnemonic:'ROR', phase:'ROR' },
+];
 
 /**
  * Decodes a word into into opcode, operand and phase transition.
@@ -145,6 +154,20 @@ export function decode(word) {
 	const ar = (word & 0b00011111) >> 0;
 	const opcode = opcodes[ir];
 	return { ir, ar, opcode };
+}
+
+/**
+ * Decodes an operator into a list of operators.
+ *
+ * Multiple operators can be executed on the same cycle, and are
+ * returned as a list of phases to handle them. Operations always execute
+ * as has been specified (ascending order by code).
+ *
+ * @param   {Number} opr
+ * @returns {Array}
+ */
+export function decodeOperator(opr) {
+	return operators.filter(o => opr & o.code);
 }
 
 /**
@@ -360,7 +383,7 @@ function OUT(state) {
 }
 
 /**
- * Operate on accumulator.
+ * Executes operators over the accumulator.
  *
  * Executes the operation expressed by the address register on the
  * accumulator, and stores the results into the accumulator. Requires no
@@ -370,14 +393,12 @@ function OUT(state) {
  * @returns {CPU}
  */
 function OPR(state) {
-	const newState = Object
-		.keys(operators)
-		.map(op => parseInt(op, 10)).sort()
-		.filter(op => state.ar & op)
-		.reduce(function(diff, op) {
-			var handler = phases[operators[op]];
-			return { ...diff, ...handler({ ...state, ...diff }) };
-		}, {});
+	const ops = decodeOperator(state.ar);
+	const newState = ops.reduce(function(partial, opr) {
+		const handler = phases[opr.phase];
+		const result = handler({ ...state, ...partial });
+		return { ...partial, ...result };
+	}, {});
 	newState.next = 'FETCH';
 	return newState;
 }
