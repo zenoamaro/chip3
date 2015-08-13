@@ -3,6 +3,7 @@ import {PropTypes as T} from 'react';
 import Component from './Component';
 import Layout from './Layout';
 import {hexString, bitString, byteFormats} from './utils';
+import * as CPU from 'Engine/CPU';
 
 
 export default class RAM extends Component {
@@ -34,12 +35,12 @@ export default class RAM extends Component {
 			padding: '.93rem 0 .7rem',
 		},
 		addr: {},
-		val: {},
-		bits: {
-			flexBasis: 'auto',
+		short: {},
+		long: {
+			flexBasis: 1,
 			flexGrow: 1,
 			flexShrink: 0,
-			textAlign: 'center',
+			textAlign: 'left',
 		},
 		reg: {
 			flexBasis: 35,
@@ -92,12 +93,16 @@ export default class RAM extends Component {
 					hint: `Address - ${byteFormats(i)}`,
 					value: bitString(i, 5) })}
 				{this.renderCell({
-					style: style.val,
+					style: style.short,
 					hint: `Address contents - ${byteFormats(i)}`,
 					value: hexString(word) })}
 				{this.renderCell({
-					style: style.bits,
+					style: style.long,
 					value: bitString(word) })}
+				{this.renderCell({
+					style: style.long,
+					hint: 'Disassembly',
+					value: this.disassembled(word) })}
 				{this.renderCell({
 					style: activityStyle,
 					hint: 'Read/write activity',
@@ -122,6 +127,11 @@ export default class RAM extends Component {
 				{value}
 			</div>
 		);
+	}
+
+	disassembled(word) {
+		const {opcode, ar} = CPU.decode(word);
+		return `${opcode} ${bitString(ar)}`;
 	}
 
 }
