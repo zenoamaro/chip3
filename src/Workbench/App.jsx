@@ -14,10 +14,12 @@ export default class App extends Component {
 
 	static propTypes = {
 		program: T.array,
+		historySize: T.number,
 	}
 
 	static defaultProps = {
 		program: [],
+		historySize: 250,
 	}
 
 	state = {
@@ -65,6 +67,9 @@ export default class App extends Component {
 	}
 
 	replaceHistory(history) {
+		var {historySize} = this.props;
+		historySize = clamp(1, historySize);
+		history = history.slice(-historySize);
 		this.setState({ history, currentSnapshot:history.length-1 });
 	}
 
