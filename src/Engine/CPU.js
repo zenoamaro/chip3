@@ -122,12 +122,28 @@ export const operators = {
 };
 
 /**
+ * Decodes a word into into opcode, operand and phase transition.
+ *
+ * Produces values for the instruction and address register, and the cpu
+ * phase to transition to in order to execute the opcode.
+ *
+ * @method  decode
+ * @param   {Number} word
+ * @returns {Object}
+ */
+export function decode(word) {
+	const ir = (word & 0b11100000) >> 5;
+	const ar = (word & 0b00011111) >> 0;
+	const opcode = opcodes[ir];
+	return { ir, ar, opcode };
+}
+
+/**
  * Fetch the instruction at PC.
  *
  * Points the address register to the program counter, raises the read
  * request flag, and waits for memory to reply.
  *
- * @method  FETCH
  * @param   {CPU} state
  * @returns {CPU}
  */
@@ -152,13 +168,12 @@ export function FETCH(state) {
  * @returns {CPU}
  */
 export function FETCH2(state) {
-	const ir = (state.dr & 0b11100000) >> 5;
-	const ar = (state.dr & 0b00011111) >> 0;
-	const next = opcodes[ir];
+	const {opcode, ir, ar} = decode(state.dr);
 	return {
-		next, ir, ar,
+		ir, ar,
 		read: false,
 		pc: state.pc + 1,
+		next: opcode,
 	};
 }
 
