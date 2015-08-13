@@ -74,30 +74,39 @@ export const phases = {
 };
 
 /**
- * A map between the opcodes supported by this CPU and the phase
- * transitions that handle their execution.
+ * A description of an opcode.
  *
- * | Opcode | Mnemonic | Operand | T | Function                            |
- * |--------|----------|---------|---|-------------------------------------|
- * | 000    | OPR      | op      | 1 | Operate on accumulator              |
- * | 001    | LD       | addr    | 2 | Load memory into accumulator        |
- * | 010    | ST       | addr    | 1 | Store accumulator into memory       |
- * | 011    | ADD      | addr    | 2 | Add memory location to accumulator  |
- * | 100    | AND      | addr    | 2 | Bitwise AND memory with accumulator |
- * | 101    | JMP      | addr    | 1 | Inconditional jump                  |
- * | 110    | JZ       | addr    | 1 | Jump if accumulator is zero         |
- * | 111    | OUT      |         | 1 | Output accumulator                  |
+ * @typedef  {Object}  Opcode
+ * @property {Number}  code     - Unique code representing this opcode
+ * @property {String}  mnemonic - Next phase to be executed
+ * @property {String}  phase    - CPU phase that handles this opcode
+ * @property {Array}   operands - Data types for all accepted operands
  */
-export const opcodes = {
-	0b000: 'OPR',
-	0b001: 'LD',
-	0b010: 'ST',
-	0b011: 'ADD',
-	0b100: 'AND',
-	0b101: 'JMP',
-	0b110: 'JZ',
-	0b111: 'OUT',
-};
+
+/**
+ * Specifications for all opcodes supported by the CPU.
+ *
+ * | Opcode | Mnemonic | Operands | T | Function                            |
+ * |--------|----------|----------|---|-------------------------------------|
+ * | 000    | OPR      | operator | 1 | Operate on accumulator              |
+ * | 001    | LD       | address  | 2 | Load memory into accumulator        |
+ * | 010    | ST       | address  | 1 | Store accumulator into memory       |
+ * | 011    | ADD      | address  | 2 | Add memory location to accumulator  |
+ * | 100    | AND      | address  | 2 | Bitwise AND memory with accumulator |
+ * | 101    | JMP      | address  | 1 | Inconditional jump                  |
+ * | 110    | JZ       | address  | 1 | Jump if accumulator is zero         |
+ * | 111    | OUT      |          | 1 | Output accumulator                  |
+ */
+export const opcodes = [
+	{ code:0b000, mnemonic:'OPR', phase:'OPR', operands:['operator'] },
+	{ code:0b001, mnemonic:'LD',  phase:'LD',  operands:['address']  },
+	{ code:0b010, mnemonic:'ST',  phase:'ST',  operands:['address']  },
+	{ code:0b011, mnemonic:'ADD', phase:'ADD', operands:['address']  },
+	{ code:0b100, mnemonic:'AND', phase:'AND', operands:['address']  },
+	{ code:0b101, mnemonic:'JMP', phase:'JMP', operands:['address']  },
+	{ code:0b110, mnemonic:'JZ',  phase:'JZ',  operands:['address']  },
+	{ code:0b111, mnemonic:'OUT', phase:'OUT', operands:[]           },
+];
 
 /**
  * A map between the operators supported by the OPR instruction and the
@@ -169,11 +178,12 @@ export function FETCH(state) {
  */
 export function FETCH2(state) {
 	const {opcode, ir, ar} = decode(state.dr);
+	const next = opcode.phase;
 	return {
 		ir, ar,
 		read: false,
 		pc: state.pc + 1,
-		next: opcode,
+		next,
 	};
 }
 
