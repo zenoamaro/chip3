@@ -1,11 +1,12 @@
 {
   "name": "chip3",
   "version": "0.1.0",
-  "description": "Educational computer emulator.",
+  "description": "An interactive simulator of a simple computer",
   "homepage": "https://github.com/zenoamaro/chip3",
   "license": "MIT",
   "private": true,
   "keywords": [
+    "simulator",
     "emulator",
     "chip",
     "cpu",
