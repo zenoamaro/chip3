@@ -29,7 +29,7 @@ clean:
 	@rm -rf dist lib docs
 
 devel:
-	@$(DEVELOPMENT) $(BUILD) --config .webpack.dev.js
+	@$(DEVELOPMENT) $(DEV_SERVER) --config .webpackrc
 
 lint:
 	@$(LINT) src
@@ -37,8 +37,8 @@ lint:
 compile:
 	@$(COMPILE) -q -d lib src
 
-build:
-	@$(PRODUCTION) $(BUILD) --config .webpack.prod.js
+build: clean
+	@$(PRODUCTION) $(BUILD) --config .webpackrc
 
 test:
 	@$(TEST) --compilers $(TEST_COMPILERS) test/index.js

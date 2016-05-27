@@ -40,13 +40,13 @@ export function create() {
  * @returns {System}
  */
 export function cycle(state) {
-	var {cpu, ram} = state;
+	let {cpu, ram} = state;
 	// TODO: Refactor data synchronization
 	cpu = CPU.cycle(cpu);
-	ram = { ...ram, read:cpu.read, write:cpu.write, ar:cpu.ar, dr:cpu.dr };
+	ram = {...ram, read:cpu.read, write:cpu.write, ar:cpu.ar, dr:cpu.dr};
 	ram = RAM.cycle(ram);
-	cpu = { ...cpu, dr:ram.dr };
-	return { ...state, cpu, ram, cycle:state.cycle+1 };
+	cpu = {...cpu, dr:ram.dr};
+	return {...state, cpu, ram, cycle:state.cycle+1};
 }
 
 /**

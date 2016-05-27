@@ -1,5 +1,7 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {PropTypes as T} from 'react';
+import {AppContainer} from 'react-hot-loader';
 import Component from './Component';
 import Toolbar from './Toolbar';
 import Layout from './Layout';
@@ -13,8 +15,8 @@ import {clamp} from './utils';
 export default class App extends Component {
 
 	static propTypes = {
-		program: T.array,
 		historySize: T.number,
+		program: T.array,
 	}
 
 	static defaultProps = {
@@ -55,7 +57,7 @@ export default class App extends Component {
 	selectSnapshot = (index) => {
 		const length = this.state.history.length;
 		const current = clamp(0, index, length-1);
-		this.setState({ currentSnapshot:current });
+		this.setState({currentSnapshot:current});
 	}
 
 	pushSnapshot(state) {
@@ -67,10 +69,9 @@ export default class App extends Component {
 	}
 
 	replaceHistory(history) {
-		var {historySize} = this.props;
-		historySize = clamp(1, historySize);
+		const historySize = clamp(1, this.props.historySize);
 		history = history.slice(-historySize);
-		this.setState({ history, currentSnapshot:history.length-1 });
+		this.setState({history, currentSnapshot:history.length-1});
 	}
 
 	static style = {
@@ -84,24 +85,26 @@ export default class App extends Component {
 		const current = this.state.currentSnapshot;
 		const system = this.getCurrentSnapshot();
 		return (
-			<Layout dir='vertical' style={this.style}>
-				<Toolbar onCycle={this.cycleSystem}
-				         onReset={this.createSystem}/>
-				<Layout dir='horizontal'>
-					<HistoryPane history={history}
-					             current={current}
-					             onSelect={this.selectSnapshot}/>
-					<RAMPane ram={system.ram}
-					         pc={system.cpu.pc}/>
-					<CPUPane cpu={system.cpu}/>
+			<AppContainer>
+				<Layout dir="vertical" style={this.style}>
+					<Toolbar onCycle={this.cycleSystem}
+						onReset={this.createSystem}/>
+					<Layout dir="horizontal">
+						<HistoryPane history={history}
+							current={current}
+							onSelect={this.selectSnapshot}/>
+						<RAMPane ram={system.ram}
+							pc={system.cpu.pc}/>
+						<CPUPane cpu={system.cpu}/>
+					</Layout>
 				</Layout>
-			</Layout>
+			</AppContainer>
 		);
 	}
 
 	static bootstrap(selector, props) {
 		const $element = document.querySelector(selector);
-		return React.render(<App {...props}/>, $element);
+		return ReactDOM.render(<App {...props}/>, $element);
 	}
 
 }

@@ -1,0 +1,92 @@
+const path = require('path');
+const webpack = require('webpack');
+const WebpackShellPlugin = require('webpack-shell-plugin');
+const development = process.env.NODE_ENV === 'development';
+function d(dir) { return path.resolve(__dirname, dir); }
+
+module.exports = {
+
+	entry: {
+		chip3: development? [
+			'webpack-dev-server/client?http://localhost:8080/',
+			'webpack/hot/only-dev-server',
+			'react-hot-loader/patch',
+			'babel-polyfill',
+			d('src/index.js'),
+		] : [
+			'babel-polyfill',
+			d('src/index.js'),
+		],
+	},
+
+	devtool: development
+		? "cheap-module-source-map"
+		: "hidden-source-map",
+
+	resolve: {
+		extensions: [ '.js', '.jsx', '.json' ],
+		modules: [ 'node_modules', d('./src') ],
+	},
+
+	module: {
+		loaders: [{
+			test: /\.jsx?$/,
+			include: d('src'),
+			loaders: ['babel'],
+		}, {
+			test: /\.json$/,
+			loaders: ['json'],
+		}, {
+			test: /\.(png|svg|html|css)$/,
+			include: d('src/Workbench'),
+			loaders: [
+				'file?context=./src/Workbench&name=[name].[ext]?[hash:10]',
+			]
+		}]
+	},
+
+	node: {
+		fs: "empty"
+	},
+
+	devServer: {
+		noInfo: false,
+		hot: development,
+		historyApiFallback: true,
+		contentBase: d('dist'),
+		publicPath: 'http://localhost:8080/',
+		stats: { chunks: false },
+	},
+
+	output: {
+		path: d('dist'),
+		pathinfo: development,
+		filename: '[name].js',
+		library: 'Chip3',
+		libraryTarget: 'umd',
+		publicPath: development
+			? 'http://localhost:8080/'
+			: '/',
+	},
+
+	plugins: [
+		new webpack.NoErrorsPlugin(),
+		new webpack.EnvironmentPlugin(['NODE_ENV']),
+		new webpack.LoaderOptionsPlugin({
+			debug: development,
+			minimize: !false,
+		}),
+	].concat(development? [
+		new webpack.HotModuleReplacementPlugin(),
+		new WebpackShellPlugin({
+			'onBuildStart': "open 'http://localhost:8080'",
+		}),
+	] : [
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			comments: /\/\/#/, // Keep only source maps
+			compress: { warnings: false },
+		}),
+	]),
+
+};

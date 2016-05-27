@@ -6,12 +6,12 @@ import Component from './Component';
 export default class Layout extends Component {
 
 	static propTypes = {
-		size: T.number,
-		flex: T.number,
-		dir: T.oneOf([ 'vertical', 'horizontal' ]),
-		align: T.oneOf([ 'start', 'end', 'center', 'stretch' ]),
-		justify: T.oneOf([ 'start', 'center', 'end', 'between', 'around' ]),
+		align: T.oneOf(['start', 'end', 'center', 'stretch']),
 		children: T.node,
+		dir: T.oneOf(['vertical', 'horizontal']),
+		flex: T.number,
+		justify: T.oneOf(['start', 'center', 'end', 'between', 'around']),
+		size: T.number,
 		title: T.string,
 	}
 
@@ -52,7 +52,7 @@ export default class Layout extends Component {
 	render() {
 		return (
 			<div style={this.style}
-			     title={this.props.title}>
+				title={this.props.title}>
 				{this.props.children}
 			</div>
 		);

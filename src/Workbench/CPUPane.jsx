@@ -44,39 +44,39 @@ export default class CPU extends Component {
 					{this.renderProp({
 						label: 'Phase',
 						hint: 'Current and next phase',
-						value: `${cpu.phase} -> ${cpu.next}` })}
+						value: `${cpu.phase} -> ${cpu.next}`})}
 					{this.renderProp({
 						label: 'RST',
 						hint: 'Reset flag',
-						value: cpu.rst })}
+						value: cpu.rst})}
 					{this.renderProp({
 						label: 'READ',
 						hint: 'Memory read flag',
-						value: cpu.read })}
+						value: cpu.read})}
 					{this.renderProp({
 						label: 'WRITE',
 						hint: 'Memory write flag',
-						value: cpu.write })}
+						value: cpu.write})}
 					{this.renderProp({
 						label: 'A',
 						hint: 'Accumulator',
-						value: cpu.a })}
+						value: cpu.a})}
 					{this.renderProp({
 						label: 'DR',
 						hint: 'Data Register',
-						value: cpu.dr })}
+						value: cpu.dr})}
 					{this.renderProp({
 						label: 'IR',
 						hint: 'Instruction Register',
-						value: cpu.ir })}
+						value: cpu.ir})}
 					{this.renderProp({
 						label: 'AR',
 						hint: 'Address Register',
-						value: cpu.ar })}
+						value: cpu.ar})}
 					{this.renderProp({
 						label: 'PC',
 						hint: 'Program Counter',
-						value: cpu.pc })}
+						value: cpu.pc})}
 				</div>
 			</Layout>
 		);
@@ -89,8 +89,8 @@ export default class CPU extends Component {
 			? `${prop.hint} - ${byteFormats(value)}`
 			: prop.hint;
 		return (
-			<Layout dir='horizontal' justify='start'
-			        title={hint} style={style.prop}>
+			<Layout dir="horizontal" justify="start"
+				title={hint} style={style.prop}>
 				<div style={style.propLabel}>
 					{label}
 				</div>

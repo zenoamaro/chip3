@@ -9,8 +9,8 @@ import * as CPU from 'Engine/CPU';
 export default class RAM extends Component {
 
 	static propTypes = {
-		ram: T.object,
 		pc: T.number,
+		ram: T.object,
 	}
 
 	static style = {
@@ -87,34 +87,34 @@ export default class RAM extends Component {
 			...(ram.write && style.write),
 		};
 		return (
-			<Layout key={i} dir='horizontal' style={rowStyle}>
+			<Layout key={i} dir="horizontal" style={rowStyle}>
 				{this.renderCell({
 					style: style.addr,
 					hint: `Address - ${byteFormats(i)}`,
-					value: bitString(i, 5) })}
+					value: bitString(i, 5)})}
 				{this.renderCell({
 					style: style.short,
 					hint: `Address contents - ${byteFormats(i)}`,
-					value: hexString(word) })}
+					value: hexString(word)})}
 				{this.renderCell({
 					style: style.long,
-					value: bitString(word) })}
+					value: bitString(word)})}
 				{this.renderCell({
 					style: style.long,
 					hint: 'Disassembly',
-					value: this.disassembled(word) })}
+					value: this.disassembled(word)})}
 				{this.renderCell({
 					style: activityStyle,
 					hint: 'Read/write activity',
-					value: activity })}
+					value: activity})}
 				{this.renderCell({
 					style: {...style.reg, ...style.ar},
 					hint: 'Address Register',
-					value: ram.ar === i && '<AR' })}
+					value: ram.ar === i && '<AR'})}
 				{this.renderCell({
 					style: {...style.reg, ...style.pc},
 					hint: 'Program Counter',
-					value: pc === i && '<PC' })}
+					value: pc === i && '<PC'})}
 			</Layout>
 		);
 	}
@@ -123,7 +123,7 @@ export default class RAM extends Component {
 		const {hint, style, value} = cell;
 		return (
 			<div title={hint}
-			     style={{...this.style.cell, ...style}}>
+				style={{...this.style.cell, ...style}}>
 				{value}
 			</div>
 		);
@@ -133,13 +133,13 @@ export default class RAM extends Component {
 		const {opcode, ar} = CPU.decode(word);
 		const {mnemonic, operands} = opcode;
 		switch (operands[0]) {
-			case 'address':
-				return `${mnemonic} [${bitString(ar, 5)}]`;
-			case 'operator':
-				let operators = CPU.decodeOperator(ar);
-				return operators.map(o => o.mnemonic).join(' ');
-			default:
-				return mnemonic;
+		case 'address':
+			return `${mnemonic} [${bitString(ar, 5)}]`;
+		case 'operator':
+			let operators = CPU.decodeOperator(ar);
+			return operators.map(o => o.mnemonic).join(' ');
+		default:
+			return mnemonic;
 		}
 	}
 

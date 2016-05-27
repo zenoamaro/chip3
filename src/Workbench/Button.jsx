@@ -38,27 +38,27 @@ export default class Button extends Component {
 	render() {
 		return (
 			<button style={this.style}
-			        onClick={this.props.onClick}
-			        onMouseEnter={this.onMouseEnter}
-			        onMouseLeave={this.onMouseLeave}
-			        onMouseDown={this.onMouseDown}>
+				onClick={this.props.onClick}
+				onMouseEnter={this.onMouseEnter}
+				onMouseLeave={this.onMouseLeave}
+				onMouseDown={this.onMouseDown}>
 				{this.props.children}
 			</button>
 		);
 	}
 
-	onMouseEnter = () => this.setState({ hover:true });
-	onMouseLeave = () => this.setState({ hover:false });
+	onMouseEnter = () => this.setState({hover:true});
+	onMouseLeave = () => this.setState({hover:false});
 
 	onMouseDown = () => {
 		// This way we can receive `mouseup` outside the element.
 		window.addEventListener('mouseup', this.onMouseUp);
-		this.setState({ active:true });
+		this.setState({active:true});
 	};
 
 	onMouseUp = () => {
 		window.removeEventListener('mouseup', this.onMouseUp);
-		this.setState({ active:false });
+		this.setState({active:false});
 	};
 
 	componentWillUnmount() {

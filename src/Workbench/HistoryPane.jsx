@@ -7,8 +7,8 @@ import Layout from './Layout';
 export default class CPU extends Component {
 
 	static propTypes = {
-		history: T.array,
 		current: T.number,
+		history: T.array,
 		onSelect: T.func,
 	}
 
@@ -39,10 +39,10 @@ export default class CPU extends Component {
 
 	renderRow(snapshot, i) {
 		const active = i === this.props.current;
-		const style = { ...this.style.row, ...(active&&this.style.rowActive) };
+		const style = {...this.style.row, ...(active&&this.style.rowActive)};
 		return (
 			<div key={snapshot.cycle} style={style}
-			     onClick={() => this.props.onSelect(i)}>
+				onClick={() => this.props.onSelect(i)}>
 				Clock cycle {snapshot.cycle} - {snapshot.cpu.phase}
 			</div>
 		);

@@ -56,8 +56,10 @@ export function hexString(x, pad=2) {
  * @returns {Array}
  */
 export function bitArray(x, len=8) {
-	const digits = [ 128, 64, 32, 16, 8, 4, 2, 1 ].slice(len * -1);
+	const digits = [128, 64, 32, 16, 8, 4, 2, 1].slice(len * -1);
+	/* eslint-disable no-bitwise */
 	return digits.map(d => (x & d) > 0? 1 : 0);
+	/* eslint-enable no-bitwise */
 }
 
 /**

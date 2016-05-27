@@ -22,7 +22,7 @@ export default class Toolbar extends Component {
 	render() {
 		return (
 			<header style={this.style}>
-				<Layout dir='horizontal' align='center' justify='between'>
+				<Layout dir="horizontal" align="center" justify="between">
 					<div>
 						<Button onClick={this.props.onCycle}>Cycle</Button>
 						<Button onClick={this.props.onReset}>Reset</Button>

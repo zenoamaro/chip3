@@ -44,14 +44,14 @@ export function create() {
  * @returns {RAM}
  */
 export function cycle(state) {
-	var receiver;
+	let receiver;
 	switch (true) {
 		case state.rst:   receiver = create; break;
 		case state.read:  receiver = read; break;
 		case state.write: receiver = write; break;
-		default:          return { ...state };
+		default:          return {...state};
 	}
-	return { ...state, ...receiver(state) };
+	return {...state, ...receiver(state)};
 }
 
 /**
@@ -64,7 +64,7 @@ export function cycle(state) {
 function read(state) {
 	const ar = state.ar;
 	const dr = state.data[ar];
-	return { ar, dr };
+	return {ar, dr};
 }
 
 /**
@@ -76,9 +76,9 @@ function read(state) {
  */
 function write(state) {
 	const {ar, dr} = state;
-	var data = state.data.slice();
+	const data = state.data.slice();
 	data[ar] = dr; // This ruins my feng shui
-	return { data };
+	return {data};
 }
 
 /**

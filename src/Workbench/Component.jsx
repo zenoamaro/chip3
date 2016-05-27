@@ -1,6 +1,6 @@
 import React from 'react';
 import {PropTypes as T} from 'react';
-import shallowEqual from 'react/lib/shallowEqual';
+import shallowCompare from 'react/lib/shallowCompare';
 
 
 export default class Component extends React.Component {
@@ -28,8 +28,7 @@ export default class Component extends React.Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return !shallowEqual(this.props, nextProps)
-		    || !shallowEqual(this.state, nextState);
+		return shallowCompare(this, nextProps, nextState);
 	}
 
 }

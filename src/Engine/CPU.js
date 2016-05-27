@@ -23,44 +23,6 @@
 
 
 /**
- * Create a CPU in a virgin state.
- *
- * @method create
- * @returns {CPU}
- */
-export function create() {
-	return {
-		phase: 'RESET',
-		next: 'FETCH',
-		rst: false,
-		read: false,
-		write: false,
-		a: 0,
-		dr: 0,
-		ir: 0,
-		ar: 0,
-		pc: 0,
-	};
-}
-
-/**
- * Executes one CPU cycle, returning the new state.
- *
- * @param   {CPU} state
- * @returns {CPU}
- */
-export function cycle(state) {
-	var receiver;
-	const phase = state.next;
-	switch (true) {
-		case state.rst:       receiver = create; break;
-		case phase in phases: receiver = phases[phase]; break;
-		default:              return { ...state };
-	}
-	return { ...state, phase, ...receiver(state) };
-}
-
-/**
  * Handlers for every phase the CPU can transition to.
  */
 export const phases = {
@@ -98,14 +60,14 @@ export const phases = {
  * | 111    | OUT      |          | 1 | Output accumulator                  |
  */
 export const opcodes = [
-	{ code:0b000, mnemonic:'OPR', phase:'OPR', operands:['operator'] },
-	{ code:0b001, mnemonic:'LD',  phase:'LD',  operands:['address']  },
-	{ code:0b010, mnemonic:'ST',  phase:'ST',  operands:['address']  },
-	{ code:0b011, mnemonic:'ADD', phase:'ADD', operands:['address']  },
-	{ code:0b100, mnemonic:'AND', phase:'AND', operands:['address']  },
-	{ code:0b101, mnemonic:'JMP', phase:'JMP', operands:['address']  },
-	{ code:0b110, mnemonic:'JZ',  phase:'JZ',  operands:['address']  },
-	{ code:0b111, mnemonic:'OUT', phase:'OUT', operands:[]           },
+	{code:0b000, mnemonic:'OPR', phase:'OPR', operands:['operator']},
+	{code:0b001, mnemonic:'LD',  phase:'LD',  operands:['address']},
+	{code:0b010, mnemonic:'ST',  phase:'ST',  operands:['address']},
+	{code:0b011, mnemonic:'ADD', phase:'ADD', operands:['address']},
+	{code:0b100, mnemonic:'AND', phase:'AND', operands:['address']},
+	{code:0b101, mnemonic:'JMP', phase:'JMP', operands:['address']},
+	{code:0b110, mnemonic:'JZ',  phase:'JZ',  operands:['address']},
+	{code:0b111, mnemonic:'OUT', phase:'OUT', operands:[]},
 ];
 
 /**
@@ -132,12 +94,50 @@ export const opcodes = [
  * | 10000    | ROR      | Rotate accumulator right     |
  */
 export const operators = [
-	{ code:0b00001, mnemonic:'CLR', phase:'CLR' },
-	{ code:0b00010, mnemonic:'NOT', phase:'NOT' },
-	{ code:0b00100, mnemonic:'INC', phase:'INC' },
-	{ code:0b01000, mnemonic:'ROL', phase:'ROL' },
-	{ code:0b10000, mnemonic:'ROR', phase:'ROR' },
+	{code:0b00001, mnemonic:'CLR', phase:'CLR'},
+	{code:0b00010, mnemonic:'NOT', phase:'NOT'},
+	{code:0b00100, mnemonic:'INC', phase:'INC'},
+	{code:0b01000, mnemonic:'ROL', phase:'ROL'},
+	{code:0b10000, mnemonic:'ROR', phase:'ROR'},
 ];
+
+/**
+ * Create a CPU in a virgin state.
+ *
+ * @method create
+ * @returns {CPU}
+ */
+export function create() {
+	return {
+		phase: 'RESET',
+		next: 'FETCH',
+		rst: false,
+		read: false,
+		write: false,
+		a: 0,
+		dr: 0,
+		ir: 0,
+		ar: 0,
+		pc: 0,
+	};
+}
+
+/**
+ * Executes one CPU cycle, returning the new state.
+ *
+ * @param   {CPU} state
+ * @returns {CPU}
+ */
+export function cycle(state) {
+	let receiver;
+	const phase = state.next;
+	switch (true) {
+		case state.rst:       receiver = create; break;
+		case phase in phases: receiver = phases[phase]; break;
+		default:              return {...state};
+	}
+	return {...state, phase, ...receiver(state)};
+}
 
 /**
  * Decodes a word into into opcode, operand and phase transition.
@@ -150,10 +150,12 @@ export const operators = [
  * @returns {Object}
  */
 export function decode(word) {
+	/* eslint-disable no-bitwise */
 	const ir = (word & 0b11100000) >> 5;
 	const ar = (word & 0b00011111) >> 0;
+	/* eslint-enable no-bitwise */
 	const opcode = opcodes[ir];
-	return { ir, ar, opcode };
+	return {ir, ar, opcode};
 }
 
 /**
@@ -167,7 +169,9 @@ export function decode(word) {
  * @returns {Array}
  */
 export function decodeOperator(opr) {
+	/* eslint-disable no-bitwise */
 	return operators.filter(o => opr & o.code);
+	/* eslint-enable no-bitwise */
 }
 
 /**
@@ -324,7 +328,9 @@ function AND(state) {
  */
 function AND2(state) {
 	return {
+		/* eslint-disable no-bitwise */
 		a: (state.a & state.dr) % 256,
+		/* eslint-enable no-bitwise */
 		read: false,
 		next: 'FETCH',
 	};
@@ -340,7 +346,9 @@ function AND2(state) {
  */
 function JMP(state) {
 	return {
+		/* eslint-disable no-bitwise */
 		pc: state.ar & 0b00011111,
+		/* eslint-enable no-bitwise */
 		next: 'FETCH',
 	};
 }
@@ -356,7 +364,9 @@ function JMP(state) {
  */
 function JZ(state) {
 	const z = state.a === 0;
+	/* eslint-disable no-bitwise */
 	const ar = state.ar & 0b00011111;
+	/* eslint-enable no-bitwise */
 	const pc = z? ar : state.pc;
 	return {
 		pc,
@@ -373,10 +383,10 @@ function JZ(state) {
  * @returns {CPU}
  */
 function OUT(state) {
-	/* eslint-disable */
+	/* eslint-disable no-console */
 	// TODO: Implement output device or generic I/O.
 	console.log(state.a);
-	/* eslint-enable */
+	/* eslint-enable no-console */
 	return {
 		next: 'FETCH',
 	};
@@ -394,10 +404,10 @@ function OUT(state) {
  */
 function OPR(state) {
 	const ops = decodeOperator(state.ar);
-	const newState = ops.reduce(function(partial, opr) {
+	const newState = ops.reduce((partial, opr) => {
 		const handler = phases[opr.phase];
-		const result = handler({ ...state, ...partial });
-		return { ...partial, ...result };
+		const result = handler({...state, ...partial});
+		return {...partial, ...result};
 	}, {});
 	newState.next = 'FETCH';
 	return newState;
@@ -427,7 +437,9 @@ function CLR(state) {
  */
 function NOT(state) {
 	return {
+		/* eslint-disable no-bitwise */
 		a: ~state.a & 0b11111111,
+		/* eslint-enable no-bitwise */
 	};
 }
 
@@ -455,7 +467,9 @@ function INC(state) {
  */
 function ROL(state) {
 	return {
+		/* eslint-disable no-bitwise */
 		a: (state.a << 1) % 256,
+		/* eslint-enable no-bitwise */
 	};
 }
 
@@ -469,7 +483,9 @@ function ROL(state) {
  */
 function ROR(state) {
 	return {
+		/* eslint-disable no-bitwise */
 		a: (state.a >> 1) % 256,
+		/* eslint-enable no-bitwise */
 	};
 }
 
