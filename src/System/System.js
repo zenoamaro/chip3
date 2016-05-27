@@ -1,7 +1,7 @@
 /**
  * Functions to create and operate on complete systems.
  *
- * @module Engine/System
+ * @module System/System
  */
 
 import * as CPU from './CPU';

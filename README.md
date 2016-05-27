@@ -5,7 +5,7 @@ Chip3 is an interactive simulator of a simple computer.
 
 It simulates a Von Neumann 8-bit CPU with a 3-bit instruction set, a 5-bit memory addressing scheme, and one register.
 
-Included is a workbench with inspectors to examine the state of the whole system down to clock cycle level, and supports time-travel to previous states aiding learning and debugging. The architecture is simple, declarative, and is separated between engine and inspector. The code itself is as simple as possible, and is laid out in a purely functional fashion.
+Included is a workbench with inspectors to examine the state of the whole system down to clock cycle level, and supports time-travel to previous states aiding learning and debugging. The architecture is simple, declarative, and is separated between system and inspector. The code itself is as simple as possible, and is laid out in a purely functional fashion.
 
 [Try the live demo](https://zenoamaro.github.io/chip3).
 

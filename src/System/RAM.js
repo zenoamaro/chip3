@@ -1,7 +1,7 @@
 /**
  * Functions to create and operate on blocks of RAM.
  *
- * @module Engine/RAM
+ * @module System/RAM
  */
 
 

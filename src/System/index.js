@@ -2,7 +2,7 @@
  * Components and utilities to create, operate and analyze
  * a Chip3 computer.
  *
- * @module Engine
+ * @module System
  */
 
 export * as CPU from './CPU';

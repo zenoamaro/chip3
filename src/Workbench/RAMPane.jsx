@@ -3,7 +3,7 @@ import {PropTypes as T} from 'react';
 import Component from './Component';
 import Layout from './Layout';
 import {hexString, bitString, byteFormats} from './utils';
-import * as CPU from 'Engine/CPU';
+import * as CPU from 'System/CPU';
 
 
 export default class RAM extends Component {

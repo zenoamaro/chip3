@@ -1,7 +1,7 @@
 /**
  * Functions to create and operate on CPUs.
  *
- * @module Engine/CPU
+ * @module System/CPU
  */
 
 

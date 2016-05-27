@@ -1,5 +1,5 @@
 /**
- * A graphical inspector for the Chip3 engine.
+ * A graphical inspector for the Chip3 system.
  *
  * @module Workbench
  */

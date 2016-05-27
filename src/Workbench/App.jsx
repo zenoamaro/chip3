@@ -8,7 +8,7 @@ import Layout from './Layout';
 import CPUPane from './CPUPane';
 import RAMPane from './RAMPane';
 import HistoryPane from './HistoryPane';
-import {System} from 'Engine';
+import {System} from 'System';
 import {clamp} from './utils';
 
 
