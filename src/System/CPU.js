@@ -114,6 +114,7 @@ export function create() {
 		rst: false,
 		read: false,
 		write: false,
+		output: null,
 		a: 0,
 		dr: 0,
 		ir: 0,
@@ -188,6 +189,7 @@ export function FETCH(state) {
 		ar: state.pc,
 		read: true,
 		write: false,
+		output: null,
 		next: 'FETCH2',
 	};
 }
@@ -383,12 +385,9 @@ function JZ(state) {
  * @returns {CPU}
  */
 function OUT(state) {
-	/* eslint-disable no-console */
-	// TODO: Implement output device or generic I/O.
-	console.log(state.a);
-	/* eslint-enable no-console */
 	return {
 		next: 'FETCH',
+		output: state.a,
 	};
 }
 
