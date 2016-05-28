@@ -84,6 +84,7 @@ export default class App extends Component {
 	render() {
 		const history = this.state.history;
 		const current = this.state.currentSnapshot;
+		const currentHistory = history.slice(0, current+1);
 		const system = this.getCurrentSnapshot();
 		return (
 			<AppContainer>
@@ -98,7 +99,7 @@ export default class App extends Component {
 							pc={system.cpu.pc}/>
 						<Layout dir="vertical" size={275}>
 							<CPUPane cpu={system.cpu}/>
-							<PrinterPane history={history}/>
+							<PrinterPane history={currentHistory}/>
 						</Layout>
 					</Layout>
 				</Layout>
