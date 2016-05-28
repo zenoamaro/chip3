@@ -50,27 +50,35 @@ export function hexString(x, pad=2) {
 /**
  * Converts a byte to an array of bits.
  *
+ * Optionally, specify printable characters to represent the states.
+ *
  * @method  bitArray
  * @param   {Number} x
  * @param   {Number} [len=8]
+ * @param   {Any} [off=0]
+ * @param   {Any} [on=1]
  * @returns {Array}
  */
-export function bitArray(x, len=8) {
+export function bitArray(x, len=8, off=0, on=1) {
 	const digits = [128, 64, 32, 16, 8, 4, 2, 1].slice(len * -1);
 	/* eslint-disable no-bitwise */
-	return digits.map(d => (x & d) > 0? 1 : 0);
+	return digits.map(d => (x & d) > 0? on : off);
 	/* eslint-enable no-bitwise */
 }
 
 /**
  * Converts a byte to string of bits.
  *
+ * Optionally, specify printable characters to represent the states.
+ *
  * @param   {Number} x
  * @param   {Number} [len]
+ * @param   {Any} [off='0']
+ * @param   {Any} [on='1']
  * @returns {String}
  */
-export function bitString(x, len) {
-	return bitArray(x, len).join('');
+export function bitString(x, len, off='0', on='1') {
+	return bitArray(x, len, off, on).join('');
 }
 
 /**
