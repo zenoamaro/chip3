@@ -22,7 +22,7 @@ export default class App extends Component {
 
 	static defaultProps = {
 		program: [],
-		historySize: 250,
+		historySize: 500,
 	}
 
 	state = {
