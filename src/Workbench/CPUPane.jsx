@@ -59,6 +59,10 @@ export default class CPUPane extends Component {
 						hint: 'Memory write flag',
 						value: cpu.write})}
 					{this.renderProp({
+						label: 'OUTPUT',
+						hint: 'I/O output',
+						value: cpu.output})}
+					{this.renderProp({
 						label: 'A',
 						hint: 'Accumulator',
 						value: cpu.a})}

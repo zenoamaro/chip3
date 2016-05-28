@@ -51,7 +51,8 @@ export default class PrinterPane extends Component {
 	}
 
 	render() {
-		const lines = this.props.history;
+		const lines = this.props.history
+			.filter(s => s.cpu.output);
 
 		return (
 			<Layout style={this.style.pane}>
@@ -62,15 +63,20 @@ export default class PrinterPane extends Component {
 		);
 	}
 
-	renderLine = (state, i) => (
-		<Layout key={i} style={this.style.line} dir="horizontal">
-			<div style={this.style.lineHex}>
-				{hexString(0)}
-			</div>
-			<div style={this.style.lineBinary}>
-				{bitString(0, 8, '  ', '▓▓')}
-			</div>
-		</Layout>
-	)
+	renderLine = (state, i) => {
+		const output = state.cpu.output;
+		if (!output) return;
+
+		return (
+			<Layout key={i} style={this.style.line} dir="horizontal">
+				<div style={this.style.lineHex}>
+					{hexString(state.cpu.output)}
+				</div>
+				<div style={this.style.lineBinary}>
+					{bitString(state.cpu.output, 8, '  ', '▓▓')}
+				</div>
+			</Layout>
+		);
+	}
 
 }
