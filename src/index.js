@@ -6,4 +6,5 @@
  */
 
 export * as System from './System';
+export * as Assembler from './Assembler';
 export * as Workbench from './Workbench';

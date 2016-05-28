@@ -1,0 +1,65 @@
+/**
+ * Assembler type definitions.
+ *
+ * @module Assembler/types
+ */
+
+/**
+ * A type of token.
+ *
+ * @typedef  {Object}  TokenType
+ * @property {String}  name
+ * @property {RegExp}  pattern
+ */
+
+/**
+ * A token.
+ *
+ * @typedef  {Object}   Token
+ * @property {String}   type
+ * @property {Any}      value
+ */
+
+/**
+ * A block of tokens.
+ *
+ * @typedef  {Token[]}    Block
+ */
+
+/**
+ * A type of instruction.
+ *
+ * @typedef  {Object}   InstructionType
+ * @property {String}   name
+ * @property {String[]} operands
+ * @property {Function} assemble
+ */
+
+/**
+ * An instruction.
+ *
+ * @typedef  {Object}   Instruction
+ * @property {String}   type
+ * @property {Token[]}  operands
+ * @property {String}   [label]
+ */
+
+/**
+ * A syntax tree.
+ *
+ * @typedef  {Instruction[]}  AST
+ */
+
+/**
+ * Codifies an instruction with operands.
+ *
+ * In Chip3 this will always be exactly one byte.
+ *
+ * @typedef  {Number}  Opcode
+ */
+
+/**
+ * A list of opcodes.
+ *
+ * @typedef  {Opcode[]}  Program
+ */
