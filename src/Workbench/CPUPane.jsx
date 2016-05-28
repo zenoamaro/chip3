@@ -5,7 +5,7 @@ import Layout from './Layout';
 import {hexString, byteFormats} from './utils';
 
 
-export default class CPU extends Component {
+export default class CPUPane extends Component {
 
 	static propTypes = {
 		cpu: T.object,
@@ -13,6 +13,7 @@ export default class CPU extends Component {
 
 	static style = {
 		pane: {
+			flex: '0 0 auto',
 			background: '#f6f6f6',
 			borderLeft: 'solid thin #bbb',
 		},
@@ -31,7 +32,7 @@ export default class CPU extends Component {
 		},
 		propValue: {
 			fontFamily: 'lucida console, monospace',
-			marginTop: '.2rem',
+			marginTop: '.08rem',
 			marginRight: '1rem',
 		},
 	}
@@ -39,7 +40,7 @@ export default class CPU extends Component {
 	render() {
 		const cpu = this.props.cpu;
 		return (
-			<Layout size={275} style={this.style.pane}>
+			<Layout style={this.style.pane}>
 				<div>
 					{this.renderProp({
 						label: 'Phase',

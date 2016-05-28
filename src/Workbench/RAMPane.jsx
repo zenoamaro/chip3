@@ -6,7 +6,7 @@ import {hexString, bitString, byteFormats} from './utils';
 import * as CPU from 'System/CPU';
 
 
-export default class RAM extends Component {
+export default class RAMPane extends Component {
 
 	static propTypes = {
 		pc: T.number,

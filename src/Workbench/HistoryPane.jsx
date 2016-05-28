@@ -4,7 +4,7 @@ import Component from './Component';
 import Layout from './Layout';
 
 
-export default class CPU extends Component {
+export default class HistoryPane extends Component {
 
 	static propTypes = {
 		current: T.number,

@@ -5,9 +5,10 @@ import {AppContainer} from 'react-hot-loader';
 import Component from './Component';
 import Toolbar from './Toolbar';
 import Layout from './Layout';
-import CPUPane from './CPUPane';
-import RAMPane from './RAMPane';
 import HistoryPane from './HistoryPane';
+import RAMPane from './RAMPane';
+import CPUPane from './CPUPane';
+import PrinterPane from './PrinterPane';
 import {System} from 'System';
 import {clamp} from './utils';
 
@@ -95,7 +96,10 @@ export default class App extends Component {
 							onSelect={this.selectSnapshot}/>
 						<RAMPane ram={system.ram}
 							pc={system.cpu.pc}/>
-						<CPUPane cpu={system.cpu}/>
+						<Layout dir="vertical" size={275}>
+							<CPUPane cpu={system.cpu}/>
+							<PrinterPane history={history}/>
+						</Layout>
 					</Layout>
 				</Layout>
 			</AppContainer>
