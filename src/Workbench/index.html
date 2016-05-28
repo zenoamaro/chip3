@@ -21,35 +21,33 @@
 	<script>(function(){
 
 Chip3.Workbench.App.bootstrap('#workbench', {
-	program: [
-		/*
-		Bouncy bits
-		-----------
-		This program bounces a single bit inside the accumulator to the
-		left and to the right, changing direction whenever it hits the
-		bounds of the register.
-		*/
+	program: Chip3.Assembler.Assembler.assembleSource(`
+		;	Bouncy bits
+		;	-----------
+		;	This program bounces a single bit inside the accumulator to the
+		;	left and to the right, changing direction whenever it hits the
+		;	bounds of the register.
 
-		/* 00000 */ 0b00110001, // init:    LD <current>
-		/* 00001 */ 0b11100000, // output:  OUT
-		/* 00010 */ 0b10010010, // bounds:  AND <first_last>
-		/* 00011 */ 0b11000111, //          JZ [move]
-		/* 00100 */ 0b00110000, // reverse: LD <direction>
-		/* 00101 */ 0b00000010, //          NOT
-		/* 00110 */ 0b01010000, //          ST <direction>
-		/* 00111 */ 0b00110000, // move:    LD <direction>
-		/* 01000 */ 0b11001100, //          JZ [right]
-		/* 01001 */ 0b00110001, // left:    LD <current>
-		/* 01010 */ 0b00001000, //          ROL
-		/* 01011 */ 0b10101110, //          JMP [store]
-		/* 01100 */ 0b00110001, // right:   LD <current>
-		/* 01101 */ 0b00010000, //          ROR
-		/* 01110 */ 0b01010001, // store:   ST <current>
-		/* 01111 */ 0b10100001, //          JMP output
-		/* 10000 */ 0b11111111, // data:    DATA <direction> 255
-		/* 10001 */ 0b10000000, //          DATA <current> 128
-		/* 10010 */ 0b10000001, //          DATA <first_last> 129
-	]
+		init:        LD [current]      ; Initial ball position
+		output:      OUT               ; Print ball position
+		bounds:      AND [first_last]  ; Is on first or last position?
+		             JZ [move]         ; If not, move
+		reverse:     LD [direction]    ;
+		             NOT               ; Invert direction
+		             ST [direction]    ;
+		move:        LD [direction]    ;
+		             JZ [right]        ; 0=right, 1=left
+		left:        LD [current]      ;
+		             ROL               ; Shift left
+		             JMP [store]       ;
+		right:       LD [current]      ;
+		             ROR               ; Shift right
+		store:       ST [current]      ;
+		             JMP [output]      ; Loop
+		direction:   DB 255            ; Current direction, 0=right, 1=left
+		current:     DB 128            ; Current position
+		first_last:  DB 129            ; First and last positions
+	`)
 });
 
 	})(this)</script>
