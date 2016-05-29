@@ -7,11 +7,13 @@ export default class Button extends Component {
 
 	static propTypes = {
 		children: T.node,
-		onClick: T.func,
+		disabled: T.bool,
+		onClick: T.func.isRequired,
 	}
 
 	static defaultProps = {
 		children: 'Button',
+		disabled: false,
 	}
 
 	static style = {
@@ -28,10 +30,13 @@ export default class Button extends Component {
 	}
 
 	computeStyle() {
+		const {disabled} = this.props;
 		const {hover, active} = this.state;
 		const highlighted = active && hover;
 		return {
 			backgroundColor: highlighted? '#e0e0e0' : 'white',
+			pointerEvents: disabled? 'none' : 'auto',
+			opacity: disabled? 0.6 : 1,
 		};
 	}
 
