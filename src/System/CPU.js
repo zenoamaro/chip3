@@ -27,7 +27,7 @@
  * Handlers for every phase the CPU can transition to.
  */
 export const phases = {
-	FETCH, FETCH2,
+	HALT, FETCH, FETCH2,
 	OPR, CLR, NOT, INC, ROL, ROR,
 	LD, LD2, ST,
 	ADD, ADD2,
@@ -174,6 +174,17 @@ export function decodeOperator(opr) {
 	/* eslint-disable no-bitwise */
 	return operators.filter(o => opr & o.code);
 	/* eslint-enable no-bitwise */
+}
+
+/**
+ * Keeps the machine halted until reset.
+ *
+ * @returns {CPU}
+ */
+export function HALT() {
+	return {
+		next: 'HALT',
+	};
 }
 
 /**
@@ -346,11 +357,18 @@ function AND2(state) {
  * Inconditional jump.
  *
  * Points the program counter to the address in the address register.
+ * If the instruction jumps to its own address, the machine will halt.
  *
  * @param   {CPU} state
  * @returns {CPU}
  */
 function JMP(state) {
+	// Halt when jumping to same address.
+	// Note that PC is already one after.
+	if (state.ar === state.pc - 1) {
+		return {next:'HALT', pc:state.ar};
+	}
+
 	return {
 		/* eslint-disable no-bitwise */
 		pc: state.ar & 0b00011111,
@@ -363,7 +381,8 @@ function JMP(state) {
  * Jump if accumulator is zero.
  *
  * Points the program counter to the address in the address register if
- * the accumulator is zero.
+ * the accumulator is zero. If a jump to the same address is attempted,
+ * the machine will halt.
  *
  * @param   {CPU} state
  * @returns {CPU}
@@ -374,6 +393,13 @@ function JZ(state) {
 	const ar = state.ar & 0b00011111;
 	/* eslint-enable no-bitwise */
 	const pc = z? ar : state.pc;
+
+	// Halt when jumping to same address.
+	// Note that PC is already one after.
+	if (pc === state.pc - 1) {
+		return {next:'HALT', pc};
+	}
+
 	return {
 		pc,
 		next: 'FETCH',

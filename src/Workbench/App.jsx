@@ -57,6 +57,8 @@ export default class App extends Component {
 		const now = Date.now();
 		this.lastCycleDuration = now - this.lastCycleTime;
 		this.lastCycleTime = now;
+		// Pause if the machine is halted
+		if (next.cpu.phase === 'HALT') this.pause();
 	}
 
 	run = () => {
