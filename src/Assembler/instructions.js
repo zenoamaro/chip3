@@ -32,6 +32,17 @@ export const DB = {
 // TODO: Combine OPRs into one opcode
 
 /**
+ * Perform no operation
+ * @type {Instruction}
+ */
+export const NOP = {
+	name: 'NOP',
+	operands: [],
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b00000)],
+};
+
+/**
  * Clear the accumulator
  * @type {Instruction}
  */
