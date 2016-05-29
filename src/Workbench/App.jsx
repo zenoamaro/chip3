@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {PropTypes as T} from 'react';
 import {AppContainer} from 'react-hot-loader';
 import Component from './Component';
+import Timer from './Timer';
 import Toolbar from './Toolbar';
 import Layout from './Layout';
 import HistoryPane from './HistoryPane';
@@ -21,20 +22,25 @@ export default class App extends Component {
 	}
 
 	static defaultProps = {
-		program: [],
 		historySize: 500,
+		program: [],
 	}
 
 	state = {
-		history: [],
 		currentSnapshot: 0,
+		history: [],
+		running: false,
+		interval: 0,
 	}
+
+	lastCycleDuration = 0;
+	lastCycleTime = 0;
 
 	componentWillMount() {
-		this.createSystem();
+		this.create();
 	}
 
-	createSystem = () => {
+	create = () => {
 		const system = System.create();
 		const {data} = system.ram;
 		const {program} = this.props;
@@ -43,11 +49,38 @@ export default class App extends Component {
 		this.replaceHistory([system]);
 	}
 
-	cycleSystem = () => {
+	cycle = () => {
 		const current = this.getCurrentSnapshot();
 		const next = System.cycle(current);
 		this.pushSnapshot(next);
+		// Measure execution time
+		const now = Date.now();
+		this.lastCycleDuration = now - this.lastCycleTime;
+		this.lastCycleTime = now;
 	}
+
+	run = () => {
+		this.setState({running: true});
+	}
+
+	pause = () => {
+		this.setState({running: false});
+	}
+
+	step = () => {
+		this.setState(
+			{running: false},
+			() => this.cycle()
+		);
+	}
+
+	reset = () => {
+		this.setState(
+			{running: false},
+			() => this.create()
+		);
+	}
+
 
 	getCurrentSnapshot() {
 		const current = this.state.currentSnapshot;
@@ -82,15 +115,21 @@ export default class App extends Component {
 	}
 
 	render() {
+		const {interval, running} = this.state;
 		const history = this.state.history;
 		const current = this.state.currentSnapshot;
 		const currentHistory = history.slice(0, current+1);
 		const system = this.getCurrentSnapshot();
+
 		return (
 			<AppContainer>
 				<Layout dir="vertical" style={this.style}>
-					<Toolbar onCycle={this.cycleSystem}
-						onReset={this.createSystem}/>
+					<Toolbar running={running}
+						speed={1000/this.lastCycleDuration}
+						onRun={this.run}
+						onPause={this.pause}
+						onCycle={this.step}
+						onReset={this.reset}/>
 					<Layout dir="horizontal">
 						<HistoryPane history={history}
 							current={current}
@@ -102,6 +141,9 @@ export default class App extends Component {
 							<PrinterPane history={currentHistory}/>
 						</Layout>
 					</Layout>
+					<Timer interval={interval}
+						running={running}
+						onTick={this.cycle}/>
 				</Layout>
 			</AppContainer>
 		);

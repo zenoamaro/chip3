@@ -8,8 +8,12 @@ import Button from './Button';
 export default class Toolbar extends Component {
 
 	static propTypes = {
-		onCycle: T.func,
-		onReset: T.func,
+		onCycle: T.func.isRequired,
+		onPause: T.func.isRequired,
+		onReset: T.func.isRequired,
+		onRun: T.func.isRequired,
+		running: T.bool.isRequired,
+		speed: T.number,
 	}
 
 	static style = {
@@ -20,12 +24,25 @@ export default class Toolbar extends Component {
 	}
 
 	render() {
+		const {
+			running,
+			speed,
+			onRun,
+			onPause,
+			onCycle,
+			onReset,
+		} = this.props;
+
 		return (
 			<header style={this.style}>
 				<Layout dir="horizontal" align="center" justify="between">
 					<div>
-						<Button onClick={this.props.onCycle}>Cycle</Button>
-						<Button onClick={this.props.onReset}>Reset</Button>
+						<Button disabled={running} onClick={onRun}>Run</Button>
+						<Button disabled={!running} onClick={onPause}>Pause</Button>
+						<Button onClick={onCycle}>Cycle</Button>
+						<Button onClick={onReset}>Reset</Button>
+						{' '}
+						{running && <span>Speed: {Math.floor(speed)} Hz</span>}
 					</div>
 				</Layout>
 			</header>
