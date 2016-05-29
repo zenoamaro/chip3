@@ -15,9 +15,10 @@ import {int} from './utils';
 export const DB = {
 	name: 'DB',
 	operands: ['number'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return int(arg.value);
+		return [int(arg.value)];
 	},
 };
 
@@ -30,7 +31,8 @@ export const DB = {
 export const CLR = {
 	name: 'CLR',
 	operands: [],
-	assemble: instr => assemble(0b000, 0b00001),
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b00001)],
 };
 
 /**
@@ -40,7 +42,8 @@ export const CLR = {
 export const NOT = {
 	name: 'NOT',
 	operands: [],
-	assemble: instr => assemble(0b000, 0b00010),
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b00010)],
 };
 
 /**
@@ -50,7 +53,8 @@ export const NOT = {
 export const INC = {
 	name: 'INC',
 	operands: [],
-	assemble: instr => assemble(0b000, 0b00100),
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b00100)],
 };
 
 /**
@@ -60,7 +64,8 @@ export const INC = {
 export const ROL = {
 	name: 'ROL',
 	operands: [],
-	assemble: instr => assemble(0b000, 0b01000),
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b01000)],
 };
 
 /**
@@ -70,7 +75,8 @@ export const ROL = {
 export const ROR = {
 	name: 'ROR',
 	operands: [],
-	assemble: instr => assemble(0b000, 0b10000),
+	size: instr => 1,
+	assemble: instr => [assemble(0b000, 0b10000)],
 };
 
 /**
@@ -80,9 +86,10 @@ export const ROR = {
 export const LD = {
 	name: 'LD',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b001, arg.addr);
+		return [assemble(0b001, arg.addr)];
 	},
 };
 
@@ -93,9 +100,10 @@ export const LD = {
 export const ST = {
 	name: 'ST',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b010, arg.addr);
+		return [assemble(0b010, arg.addr)];
 	},
 };
 
@@ -106,9 +114,10 @@ export const ST = {
 export const ADD = {
 	name: 'ADD',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b011, arg.addr);
+		return [assemble(0b011, arg.addr)];
 	},
 };
 
@@ -119,9 +128,10 @@ export const ADD = {
 export const AND = {
 	name: 'AND',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b100, arg.addr);
+		return [assemble(0b100, arg.addr)];
 	},
 };
 
@@ -132,9 +142,10 @@ export const AND = {
 export const JMP = {
 	name: 'JMP',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b101, arg.addr);
+		return [assemble(0b101, arg.addr)];
 	},
 };
 
@@ -145,9 +156,10 @@ export const JMP = {
 export const JZ = {
 	name: 'JZ',
 	operands: ['address'],
+	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return assemble(0b110, arg.addr);
+		return [assemble(0b110, arg.addr)];
 	},
 };
 
@@ -158,5 +170,6 @@ export const JZ = {
 export const OUT = {
 	name: 'OUT',
 	operands: [],
-	assemble: instr => assemble(0b111),
+	size: instr => 1,
+	assemble: instr => [assemble(0b111)],
 };

@@ -20,16 +20,8 @@ import * as instructions from './instructions';
  * @returns {AST}
  */
 export function compile(ast) {
-	/*
-	Our case is simple enough: every instruction will always occupy exactly
-	one byte, so we can assume a simple addressing scheme in which the address
-	counter is increased by one for each operation. For more complex cases where
-	the size of an opcode may vary, a less naive solution will be required.
-	*/
-	let addr = 0;
-
-	// Store encountered labels to detect duplicates.
-	const labels = {};
+	let addr = 0;       // Memory address of next instruction
+	const labels = {};  // Encountered labels
 
 	return ast.map(instr => {
 		const {label, operands} = instr;
@@ -70,11 +62,10 @@ export function compile(ast) {
 			}
 		});
 
-		return {
-			...instr,
-			type,
-			addr: addr++,
-		};
+		const size = instrType.size(instr);
+		instr = {...instr, type, size, addr};
+		addr += size; // Advance by size of opcode
+		return instr;
 	});
 }
 
