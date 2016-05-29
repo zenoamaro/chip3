@@ -18,6 +18,7 @@
  * @property {Number}  dr    - Data register
  * @property {Number}  ir    - Instruction register
  * @property {Number}  ar    - Address register
+ * @property {Number}  lr    - Last load address register
  * @property {Number}  pc    - Program counter
  */
 
@@ -220,14 +221,16 @@ export function FETCH2(state) {
  * Load memory into accumulator.
  *
  * Points the address register to the memory location to be read, raises
- * the read request flag, and waits for memory to reply.
+ * the read request flag, and waits for memory to reply. When the address
+ * is `zero`, the address in the accumulator is used instead.
  *
  * @param   {CPU} state
  * @returns {CPU}
  */
 function LD(state) {
 	return {
-		ar: state.ar,
+		ar: state.ar || state.a,
+		lr: state.ar,
 		read: true,
 		next: 'LD2',
 	};
@@ -255,14 +258,15 @@ function LD2(state) {
  *
  * Points the address register to the memory location to be written,
  * writes the contents of the accumulator on the data register, and
- * triggers the write request flag.
+ * triggers the write request flag. When the address is `zero`, the
+ * last read address is used instead.
  *
  * @param   {CPU} state
  * @returns {CPU}
  */
 function ST(state) {
 	return {
-		ar: state.ar,
+		ar: state.ar || state.lr,
 		dr: state.a,
 		write: true,
 		next: 'FETCH',

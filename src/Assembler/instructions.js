@@ -15,13 +15,14 @@ import {string} from './utils';
  */
 export const DB = {
 	name: 'DB',
-	operands: ['number|string'],
+	operands: ['address|number|string'],
 	size: instr => (
 		DB.assemble(instr).length
 	),
 	assemble: instr => {
 		const arg = instr.operands[0];
 		switch (arg.type) {
+			case 'address': return [int(arg.addr)];
 			case 'number': return [int(arg.value)];
 			case 'string': return string(arg.value);
 		}
@@ -95,8 +96,22 @@ export const LD = {
 	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
+		if (arg.addr === 0) {
+			throw new Error('Loading address `zero`, use LDA instead');
+		}
 		return [assemble(0b001, arg.addr)];
 	},
+};
+
+/**
+ * Load memory at accumulator into accumulator
+ * @type {Instruction}
+ */
+export const LDA = {
+	name: 'LDA',
+	operands: [],
+	size: instr => 1,
+	assemble: instr => [assemble(0b001, 0b00000)],
 };
 
 /**
@@ -109,8 +124,22 @@ export const ST = {
 	size: instr => 1,
 	assemble: instr => {
 		const arg = instr.operands[0];
+		if (arg.addr === 0) {
+			throw new Error('Loading address `zero`, use LDA instead');
+		}
 		return [assemble(0b010, arg.addr)];
 	},
+};
+
+/**
+ * Store accumulator into last read address
+ * @type {Instruction}
+ */
+export const STA = {
+	name: 'STA',
+	operands: [],
+	size: instr => 1,
+	assemble: instr => [assemble(0b010, 0b00000)],
 };
 
 /**

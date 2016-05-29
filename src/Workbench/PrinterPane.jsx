@@ -34,7 +34,7 @@ export default class PrinterPane extends Component {
 		},
 		line: {
 			flex: '0 0 auto',
-			padding: '12px 24px',
+			padding: '12px 20px',
 			borderBottom: 'solid thin #ddd',
 		},
 		lineHex: {
