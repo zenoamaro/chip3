@@ -30,16 +30,16 @@ export default class RAMPane extends Component {
 			background: '#ffefed',
 		},
 		cell: {
-			flexBasis: 50,
 			margin: '0 1rem',
 			padding: '.93rem 0 .7rem',
 		},
 		addr: {},
-		short: {},
+		short: {
+			flex: '0 0 35px',
+			textAlign: 'center',
+		},
 		long: {
-			flexBasis: 1,
-			flexGrow: 1,
-			flexShrink: 0,
+			flex: '1 1 0',
 			textAlign: 'left',
 		},
 		reg: {
@@ -94,6 +94,9 @@ export default class RAMPane extends Component {
 					value: bitString(i, 5)})}
 				{this.renderCell({
 					style: style.short,
+					value: String.fromCharCode(word)})}
+				{this.renderCell({
+					style: style.short,
 					hint: `Address contents - ${byteFormats(i)}`,
 					value: hexString(word)})}
 				{this.renderCell({
@@ -133,13 +136,13 @@ export default class RAMPane extends Component {
 		const {opcode, ar} = CPU.decode(word);
 		const {mnemonic, operands} = opcode;
 		switch (operands[0]) {
-		case 'address':
-			return `${mnemonic} [${bitString(ar, 5)}]`;
-		case 'operator':
-			let operators = CPU.decodeOperator(ar);
-			return operators.map(o => o.mnemonic).join(' ');
-		default:
-			return mnemonic;
+			case 'address':
+				return `${mnemonic} [${bitString(ar, 5)}]`;
+			case 'operator':
+				let operators = CPU.decodeOperator(ar);
+				return operators.map(o => o.mnemonic).join(' ');
+			default:
+				return mnemonic;
 		}
 	}
 

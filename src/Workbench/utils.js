@@ -93,5 +93,6 @@ export function byteFormats(x) {
 		`DEC=${x}`,
 		`HEX=${hexString(x)}`,
 		`BIN=${bitString(x)}`,
+		`CHAR=${String.fromCharCode(x)}`,
 	].join(' ');
 }

@@ -6,6 +6,7 @@
 
 import {assemble} from './utils';
 import {int} from './utils';
+import {string} from './utils';
 
 
 /**
@@ -14,11 +15,16 @@ import {int} from './utils';
  */
 export const DB = {
 	name: 'DB',
-	operands: ['number'],
-	size: instr => 1,
+	operands: ['number|string'],
+	size: instr => (
+		DB.assemble(instr).length
+	),
 	assemble: instr => {
 		const arg = instr.operands[0];
-		return [int(arg.value)];
+		switch (arg.type) {
+			case 'number': return [int(arg.value)];
+			case 'string': return string(arg.value);
+		}
 	},
 };
 

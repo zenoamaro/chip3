@@ -18,6 +18,18 @@ export function int(n, def=0) {
 }
 
 /**
+ * Shortcut to convert a string-like to a null-terminated string array.
+ *
+ * @param   {String} s
+ * @returns {String[]}
+ */
+export function string(s) {
+	return String(s).split('')
+		.map(c => c.charCodeAt(0))
+		.concat(0);
+}
+
+/**
  * Finds the location of a label in an abstract syntax.
  * Returns the operation that was labeled as such.
  *

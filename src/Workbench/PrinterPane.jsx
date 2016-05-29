@@ -39,7 +39,12 @@ export default class PrinterPane extends Component {
 		},
 		lineHex: {
 			flex: '0 0 auto',
-			marginRight: 16,
+			marginRight: 8,
+			textAlign: 'center',
+		},
+		lineChar: {
+			flex: '0 0 auto',
+			marginRight: 8,
 			textAlign: 'center',
 		},
 		lineBinary: {
@@ -71,6 +76,9 @@ export default class PrinterPane extends Component {
 			<Layout key={i} style={this.style.line} dir="horizontal">
 				<div style={this.style.lineHex}>
 					{hexString(state.cpu.output)}
+				</div>
+				<div style={this.style.lineChar}>
+					{String.fromCharCode(state.cpu.output)}
 				</div>
 				<div style={this.style.lineBinary}>
 					{bitString(state.cpu.output, 8, '  ', '▓▓')}

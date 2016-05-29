@@ -13,6 +13,7 @@
 const types = [
 	{name:'label',      pattern:/^([a-zA-Z_][\w]*):$/},
 	{name:'address',    pattern:/^\[([a-zA-Z_][\w]*)\]$/},
+	{name:'string',     pattern:/^"([^"]*)"$/},
 	{name:'number',     pattern:/^(\d.*)$/},
 	{name:'identifier', pattern:/^([a-zA-Z_][\w]*)$/},
 ];
