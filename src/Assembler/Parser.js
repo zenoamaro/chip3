@@ -10,68 +10,69 @@
  *
  * @type {TokenType[]}
  */
-const types = [
-	{name:'label',      pattern:/^([a-zA-Z_][\w]*):$/},
-	{name:'address',    pattern:/^\[([a-zA-Z_][\w]*)\]$/},
-	{name:'string',     pattern:/^"([^"]*)"$/},
-	{name:'number',     pattern:/^(\d.*)$/},
-	{name:'identifier', pattern:/^([a-zA-Z_][\w]*)$/},
+const tokenTypes = [
+	{name:'eol',        skip:false, pattern:/^\n+/},
+	{name:'whitespace', skip:true,  pattern:/^\s+/},
+	{name:'number',     skip:false, pattern:/^(\d+)/},
+	{name:'string',     skip:false, pattern:/^"((?:[^"\\]|\\.)*)"/},
+	{name:'address',    skip:false, pattern:/^\[([a-zA-Z_][\w]*)\]/},
+	{name:'label',      skip:false, pattern:/^([a-zA-Z_][\w]*):/},
+	{name:'identifier', skip:false, pattern:/^([a-zA-Z_][\w]*)/},
+	{name:'comment',    skip:true,  pattern:/^;.*/},
 ];
 
-
 /**
- * Finds the first token type that matches the given text.
- *
- * @param   {String} token
- * @returns {Token}
- */
-export function lexToken(token) {
-	const type = types.find(type => type.pattern.test(token));
-	if (!type) throw new Error(`Unknown token, '${token}'`);
-	const value = type.pattern.exec(token)[1];
-	return {type:type.name, value};
-}
-
-/**
- * Lexes assembly code into a stream of blocks of tokens.
- *
- * Returns a list of lines grouped into blocks. Each block contains the tokens
- * lexed for each line. Whitespace is mandatory for separating tokens. Comments
- * and empty lines are discarded at this stage.
+ * Finds the first token type that matches the beginning of the source.
  *
  * @param   {String} source
- * @returns {Block[]}
+ * @returns {Token?}
  */
-export function lex(source) {
-	const lines = source.split('\n');
-
-	return lines.reduce((block, line) => {
-		const tokens = line
-			.replace(/;.*/gm, '')  // Discard comments
-			.replace(/\s+/gm, ' ') // Collapse whitespace
-			.trim().split(' ')     // Split by whitespace
-			.filter(t => t.length) // Discard empty tokens
-			.map(lexToken);        // Lex each token
-
-		return tokens.length
-			? [...block, tokens]
-			: block; // Discard empty blocks
-	}, []);
+export function lexToken(source) {
+	const type = tokenTypes.find(type => type.pattern.test(source));
+	if (!type) throw new Error(`Invalid expression '${source.slice(0, 20)}...'`);
+	const [literal, value] = type.pattern.exec(source);
+	return {type:type.name, literal, value, skip:type.skip};
 }
 
 /**
- * Parses a list of blocks into a list of instructions.
+ * Lexes source code into a list of tokens.
  *
- * Each block represents a line of source code, and may contain a label,
- * an instruction followed by zero or more operands, and a comment,
- * in this order.
+ * @param   {String} source
+ * @returns {Token[]}
+ */
+export function lex(source) {
+	const tokens = [];
+	while (source.length) {
+		const token = lexToken(source);
+		source = source.slice(token.literal.length);
+		if (!token.skip) tokens.push(token);
+	}
+	return tokens;
+}
+
+/**
+ * Parses a list of tokens into a list of instructions.
  *
- * Returns a list of instructions, one for each block, as abstract syntax.
+ * Each line of source code may contain a label, an instruction followed by
+ * zero or more operands, and a comment, in this order.
  *
- * @param   {Block[]} blocks
+ * Returns a list of instructions, one for each line, as abstract syntax.
+ *
+ * @param   {Token[]} tokens
  * @returns {AST}
  */
-export function parse(blocks) {
+export function parse(tokens) {
+	// Chunk tokens into blocks of code describing
+	// the same operation (ie. separated by EOL)
+	const blocks = tokens.reduce((blocks, token) => {
+		if (token.type === 'eol') {
+			return [...blocks, []];
+		} else {
+			blocks[blocks.length-1].push(token);
+			return blocks;
+		}
+	}, [[]]).filter(b => b.length);
+
 	return blocks.map(block => {
 		block = [...block];
 		const instr = {};

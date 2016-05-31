@@ -21,12 +21,6 @@
  */
 
 /**
- * A block of tokens.
- *
- * @typedef  {Token[]}    Block
- */
-
-/**
  * A type of instruction.
  *
  * @typedef  {Object}   InstructionType
