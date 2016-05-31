@@ -28,16 +28,16 @@ var library = {
 		; This program reads the string "Hello!" from memory and outputs
 		; each character to the printer until it reaches the terminator.
 
-		start:    LD [offset]   ; Increment offset
-		          INC           ;
-		          STA           ;
-		          LDA           ; Load at offset
-		          JZ [end]      ; End on string terminator
-		          OUT           ;
-		          JMP [start]   ;
-		end:      JMP [end]     ; Halt
-		message:  DB "hello!"   ;
-		offset:   DB [end]      ; [message-1] ;)
+		start:    LD [offset]         ; Increment offset
+		          INC                 ;
+		          STA                 ;
+		          LDA                 ; Load at offset
+		          JZ [end]            ; End on string terminator
+		          OUT                 ;
+		          JMP [start]         ;
+		end:      JMP [end]           ; Halt
+		message:  DB "Hello, world!"  ;
+		offset:   DB [end]            ; [message-1] ;)
 	`,
 
 	bouncyBits: `
