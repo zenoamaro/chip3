@@ -14,10 +14,13 @@ export default class CPUPane extends Component {
 	static style = {
 		pane: {
 			flex: '0 0 auto',
+			flexFlow: 'row wrap',
 			background: '#f6f6f6',
 			borderLeft: 'solid thin #bbb',
 		},
 		prop: {
+			display: 'flex',
+			flex: '1 0 50%',
 			padding: '.7rem 1rem',
 			borderBottom: 'solid thin #ddd',
 		},
@@ -41,63 +44,65 @@ export default class CPUPane extends Component {
 		const cpu = this.props.cpu;
 		return (
 			<Layout style={this.style.pane}>
-				<div>
-					{this.renderProp({
-						label: 'Phase',
-						hint: 'Current and next phase',
-						value: `${cpu.phase} -> ${cpu.next}`})}
-					{this.renderProp({
-						label: 'RST',
-						hint: 'Reset flag',
-						value: cpu.rst})}
-					{this.renderProp({
-						label: 'READ',
-						hint: 'Memory read flag',
-						value: cpu.read})}
-					{this.renderProp({
-						label: 'WRITE',
-						hint: 'Memory write flag',
-						value: cpu.write})}
-					{this.renderProp({
-						label: 'OUTPUT',
-						hint: 'I/O output',
-						value: cpu.output})}
-					{this.renderProp({
-						label: 'A',
-						hint: 'Accumulator',
-						value: cpu.a})}
-					{this.renderProp({
-						label: 'IR',
-						hint: 'Instruction Register',
-						value: cpu.ir})}
-					{this.renderProp({
-						label: 'AR',
-						hint: 'Address Register',
-						value: cpu.ar})}
-					{this.renderProp({
-						label: 'DR',
-						hint: 'Data Register',
-						value: cpu.dr})}
-					{this.renderProp({
-						label: 'OR',
-						hint: 'Output Register',
-						value: cpu.or})}
-					{this.renderProp({
-						label: 'LR',
-						hint: 'Last load address Register',
-						value: cpu.ar})}
-					{this.renderProp({
-						label: 'PC',
-						hint: 'Program Counter',
-						value: cpu.pc})}
-				</div>
+				{this.renderProp({
+					label: 'Phase',
+					hint: 'Current phase',
+					value: cpu.phase})}
+				{this.renderProp({
+					label: 'Next',
+					hint: 'Next phase',
+					value: cpu.next})}
+				{this.renderProp({
+					label: 'RST',
+					hint: 'Reset flag',
+					value: cpu.rst})}
+				{this.renderProp({
+					label: 'READ',
+					hint: 'Memory read flag',
+					value: cpu.read})}
+				{this.renderProp({
+					label: 'WRITE',
+					hint: 'Memory write flag',
+					value: cpu.write})}
+				{this.renderProp({
+					label: 'OUTPUT',
+					hint: 'I/O output',
+					value: cpu.output})}
+				{this.renderProp({
+					label: 'A',
+					hint: 'Accumulator',
+					value: cpu.a})}
+				{this.renderProp({
+					label: 'IR',
+					hint: 'Instruction Register',
+					value: cpu.ir})}
+				{this.renderProp({
+					label: 'AR',
+					hint: 'Address Register',
+					value: cpu.ar})}
+				{this.renderProp({
+					label: 'DR',
+					hint: 'Data Register',
+					value: cpu.dr})}
+				{this.renderProp({
+					label: 'OR',
+					hint: 'Output Register',
+					value: cpu.or})}
+				{this.renderProp({
+					label: 'LR',
+					hint: 'Last load address Register',
+					value: cpu.ar})}
+				{this.renderProp({
+					label: 'PC',
+					hint: 'Program Counter',
+					value: cpu.pc})}
 			</Layout>
 		);
 	}
 
 	renderProp(prop) {
 		const {style} = this;
-		const {label, value} = prop;
+		const {label, value, size} = prop;
 		const hint = typeof value === 'number'
 			? `${prop.hint} - ${byteFormats(value)}`
 			: prop.hint;
