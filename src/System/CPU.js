@@ -119,9 +119,9 @@ export function create() {
 		write: false,
 		output: false,
 		a: 0,
-		dr: 0,
 		ir: 0,
 		ar: 0,
+		dr: 0,
 		or: 0,
 		pc: 0,
 	};

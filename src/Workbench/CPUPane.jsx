@@ -9,7 +9,7 @@ export default class CPUPane extends Component {
 
 	static propTypes = {
 		cpu: T.object,
-	}
+	};
 
 	static style = {
 		pane: {
@@ -35,7 +35,7 @@ export default class CPUPane extends Component {
 			marginTop: '.08rem',
 			marginRight: '1rem',
 		},
-	}
+	};
 
 	render() {
 		const cpu = this.props.cpu;
@@ -67,10 +67,6 @@ export default class CPUPane extends Component {
 						hint: 'Accumulator',
 						value: cpu.a})}
 					{this.renderProp({
-						label: 'DR',
-						hint: 'Data Register',
-						value: cpu.dr})}
-					{this.renderProp({
 						label: 'IR',
 						hint: 'Instruction Register',
 						value: cpu.ir})}
@@ -78,6 +74,10 @@ export default class CPUPane extends Component {
 						label: 'AR',
 						hint: 'Address Register',
 						value: cpu.ar})}
+					{this.renderProp({
+						label: 'DR',
+						hint: 'Data Register',
+						value: cpu.dr})}
 					{this.renderProp({
 						label: 'OR',
 						hint: 'Output Register',

@@ -8,7 +8,7 @@ export default class Timer extends Component {
 		interval: T.number.isRequired,
 		onTick: T.func.isRequired,
 		running: T.bool.isRequired,
-	}
+	};
 
 	componentWillMount() {
 		if (this.props.running) {

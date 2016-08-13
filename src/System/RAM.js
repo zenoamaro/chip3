@@ -76,8 +76,8 @@ function read(state) {
  */
 function write(state) {
 	const {ar, dr} = state;
-	const data = state.data.slice();
-	data[ar] = dr; // This ruins my feng shui
+	const data = [...state.data];
+	data[ar] = dr;
 	return {data};
 }
 

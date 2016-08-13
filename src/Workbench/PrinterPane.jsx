@@ -49,7 +49,7 @@ export default class PrinterPane extends Component {
 			letterSpacing: 1,
 			whiteSpace: 'pre',
 		},
-	}
+	};
 
 	render() {
 		const lines = this.props.printer.paper;

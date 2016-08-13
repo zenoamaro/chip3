@@ -7,7 +7,7 @@ export default class Component extends React.Component {
 
 	static propTypes = {
 		style: T.object,
-	}
+	};
 
 	get style() {
 		if (this.cachedStyle) {

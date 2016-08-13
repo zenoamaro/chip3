@@ -11,7 +11,7 @@ export default class RAMPane extends Component {
 	static propTypes = {
 		pc: T.number,
 		ram: T.object,
-	}
+	};
 
 	static style = {
 		row: {
@@ -58,7 +58,7 @@ export default class RAMPane extends Component {
 		pc: {
 			color: '#e94c3d',
 		},
-	}
+	};
 
 	render() {
 		return (

@@ -19,19 +19,19 @@ export default class App extends Component {
 	static propTypes = {
 		historySize: T.number,
 		program: T.array,
-	}
+	};
 
 	static defaultProps = {
 		historySize: 500,
 		program: [],
-	}
+	};
 
 	state = {
 		currentSnapshot: 0,
 		history: [],
 		running: false,
 		interval: 0,
-	}
+	};
 
 	lastCycleDuration = 0;
 	lastCycleTime = 0;
@@ -153,6 +153,6 @@ export default class App extends Component {
 	static bootstrap(selector, props) {
 		const $element = document.querySelector(selector);
 		return ReactDOM.render(<App {...props}/>, $element);
-	}
+	};
 
 }

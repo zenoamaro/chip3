@@ -14,14 +14,14 @@ export default class Toolbar extends Component {
 		onRun: T.func.isRequired,
 		running: T.bool.isRequired,
 		speed: T.number,
-	}
+	};
 
 	static style = {
 		flexShrink: 0,
 		padding: '.4rem .6rem',
 		background: '#eee',
 		borderBottom: 'solid thin #bbb',
-	}
+	};
 
 	render() {
 		const {

@@ -13,19 +13,19 @@ export default class Layout extends Component {
 		justify: T.oneOf(['start', 'center', 'end', 'between', 'around']),
 		size: T.number,
 		title: T.string,
-	}
+	};
 
 	static defaultProps = {
 		flex: 1,
 		dir: 'vertical',
 		align: 'stretch',
 		justify: 'between',
-	}
+	};
 
 	static style = {
 		display: 'flex',
 		overflowY: 'auto',
-	}
+	};
 
 	static stylePropMap = {
 		'vertical': 'column',
@@ -36,7 +36,7 @@ export default class Layout extends Component {
 		'between': 'space-between',
 		'around': 'space-around',
 		'stretch': 'stretch',
-	}
+	};
 
 	computeStyle() {
 		return {

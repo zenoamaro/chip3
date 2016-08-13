@@ -10,7 +10,7 @@ export default class HistoryPane extends Component {
 		current: T.number,
 		history: T.array,
 		onSelect: T.func,
-	}
+	};
 
 	static style = {
 		pane: {
@@ -25,7 +25,7 @@ export default class HistoryPane extends Component {
 			fontWeight: 'bold',
 			background: '#eee',
 		},
-	}
+	};
 
 	render() {
 		return (

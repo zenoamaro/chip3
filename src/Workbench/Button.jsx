@@ -9,12 +9,12 @@ export default class Button extends Component {
 		children: T.node,
 		disabled: T.bool,
 		onClick: T.func.isRequired,
-	}
+	};
 
 	static defaultProps = {
 		children: 'Button',
 		disabled: false,
-	}
+	};
 
 	static style = {
 		padding: '.3rem .85rem',
@@ -22,12 +22,12 @@ export default class Button extends Component {
 		borderBottomColor: '#bbb',
 		borderRadius: '.3rem',
 		background: 'white',
-	}
+	};
 
 	state = {
 		hover: false,
 		active: false,
-	}
+	};
 
 	computeStyle() {
 		const {disabled} = this.props;
