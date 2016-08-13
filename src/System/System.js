@@ -48,12 +48,30 @@ export function create() {
  */
 export function cycle(state) {
 	let {cpu, ram} = state;
-	// TODO: Refactor data synchronization
 	cpu = CPU.cycle(cpu);
-	ram = {...ram, read:cpu.read, write:cpu.write, ar:cpu.ar, dr:cpu.dr};
+	ram = synchronize(ram, cpu, ['read', 'write', 'ar', 'dr']);
 	ram = RAM.cycle(ram);
-	cpu = {...cpu, dr:ram.dr};
+	cpu = synchronize(cpu, ram, ['dr']);
 	return {...state, cpu, ram, cycle:state.cycle+1};
+}
+
+/**
+ * Returns a copy of the receiver, where all the specified lines will have the
+ * same value as those on the source.
+ *
+ * @param   {Device}   receiver
+ * @param   {Device}   source
+ * @param   {String[]} lines
+ * @returns {Device}
+ */
+export function synchronize(receiver, source, lines) {
+	return lines.reduce(
+		(receiver, line) => {
+			receiver[line] = source[line];
+			return receiver;
+		},
+		{...receiver},
+	);
 }
 
 /**
