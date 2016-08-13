@@ -19,6 +19,13 @@ import * as RAM from './RAM';
 
 
 /**
+ * A generic device.
+ *
+ * @typedef  {Object} Device
+ */
+
+
+/**
  * Create a system in a virgin state.
  *
  * @method create

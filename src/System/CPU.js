@@ -8,7 +8,7 @@
 /**
  * A CPU in a virgin state.
  *
- * @typedef  {Object}  CPU
+ * @typedef  {Device}  CPU
  * @property {String}  phase - Current phase of execution
  * @property {String}  next  - Next phase to be executed
  * @property {Boolean} rst   - Reset flag

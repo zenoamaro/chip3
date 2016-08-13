@@ -8,7 +8,7 @@
 /**
  * A block of random-access memory.
  *
- * @typedef  {Object}   RAM
+ * @typedef  {Device}   RAM
  * @property {Boolean}  rst   - Reset flag
  * @property {Boolean}  read  - Read request flag
  * @property {Boolean}  write - Write request flag
