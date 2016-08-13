@@ -6,15 +6,17 @@
 
 import * as CPU from './CPU';
 import * as RAM from './RAM';
+import * as Printer from './Printer';
 
 
 /**
  * A system in a virgin state.
  *
  * @typedef  {Object} System
- * @property {RAM}    ram     - RAM component
- * @property {CPU}    cpu     - CPU component
- * @property {Number} cycle   - Current cycle number
+ * @property {CPU}     cpu     - CPU component
+ * @property {RAM}     ram     - RAM component
+ * @property {Printer} printer - Printer component
+ * @property {Number}  cycle   - Current cycle number
  */
 
 
@@ -35,24 +37,25 @@ export function create() {
 	return {
 		cpu: CPU.create(),
 		ram: RAM.create(),
+		printer: Printer.create(),
 		cycle: 1,
 	};
 }
 
 /**
- * Executes one system cycle by cycling CPU and RAM, and returning the
+ * Executes one system cycle by cycling components, and returning the
  * new state.
  *
  * @param   {System} state
  * @returns {System}
  */
 export function cycle(state) {
-	let {cpu, ram} = state;
+	let {cpu, ram, printer} = state;
 	cpu = CPU.cycle(cpu);
-	ram = synchronize(ram, cpu, ['read', 'write', 'ar', 'dr']);
-	ram = RAM.cycle(ram);
+	ram = RAM.cycle(synchronize(ram, cpu, ['read', 'write', 'ar', 'dr']));
 	cpu = synchronize(cpu, ram, ['dr']);
-	return {...state, cpu, ram, cycle:state.cycle+1};
+	printer = Printer.cycle(synchronize(printer, cpu, ['output', 'or']));
+	return {...state, cpu, ram, printer, cycle:state.cycle+1};
 }
 
 /**
@@ -82,5 +85,6 @@ export function synchronize(receiver, source, lines) {
  */
 export function toString(state) {
 	return `${state.cycle}\t${CPU.toString(state.cpu)}\n`
-	     + `\t${RAM.toString(state.ram)}`;
+	     + `\t${RAM.toString(state.ram)}\n`
+	     + `\t${Printer.toString(state.printer)}`;
 }

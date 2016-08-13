@@ -9,17 +9,19 @@
  * A CPU in a virgin state.
  *
  * @typedef  {Device}  CPU
- * @property {String}  phase - Current phase of execution
- * @property {String}  next  - Next phase to be executed
- * @property {Boolean} rst   - Reset flag
- * @property {Boolean} read  - Read request flag
- * @property {Boolean} write - Write request flag
- * @property {Number}  a     - Accumulator
- * @property {Number}  dr    - Data register
- * @property {Number}  ir    - Instruction register
- * @property {Number}  ar    - Address register
- * @property {Number}  lr    - Last load address register
- * @property {Number}  pc    - Program counter
+ * @property {String}  phase  - Current phase of execution
+ * @property {String}  next   - Next phase to be executed
+ * @property {Boolean} rst    - Reset flag
+ * @property {Boolean} read   - Read request flag
+ * @property {Boolean} write  - Write request flag
+ * @property {Boolean} output - Device output request
+ * @property {Number}  a      - Accumulator
+ * @property {Number}  dr     - Data register
+ * @property {Number}  ir     - Instruction register
+ * @property {Number}  ar     - Address register
+ * @property {Number}  or     - Output register
+ * @property {Number}  lr     - Last load address register
+ * @property {Number}  pc     - Program counter
  */
 
 
@@ -115,11 +117,12 @@ export function create() {
 		rst: false,
 		read: false,
 		write: false,
-		output: null,
+		output: false,
 		a: 0,
 		dr: 0,
 		ir: 0,
 		ar: 0,
+		or: 0,
 		pc: 0,
 	};
 }
@@ -201,7 +204,7 @@ export function FETCH(state) {
 		ar: state.pc,
 		read: true,
 		write: false,
-		output: null,
+		output: false,
 		next: 'FETCH2',
 	};
 }
@@ -417,7 +420,8 @@ function JZ(state) {
 function OUT(state) {
 	return {
 		next: 'FETCH',
-		output: state.a,
+		output: true,
+		or: state.a,
 	};
 }
 

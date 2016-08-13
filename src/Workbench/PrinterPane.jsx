@@ -8,12 +8,8 @@ import {hexString, bitString} from './utils';
 export default class PrinterPane extends Component {
 
 	static propTypes = {
-		history: T.array,
-	}
-
-	static defaultProps = {
-		history: [],
-	}
+		printer: T.object,
+	};
 
 	static style = {
 		pane: {
@@ -56,8 +52,7 @@ export default class PrinterPane extends Component {
 	}
 
 	render() {
-		const lines = this.props.history
-			.filter(s => s.cpu.output);
+		const lines = this.props.printer.paper;
 
 		return (
 			<Layout style={this.style.pane}>
@@ -68,20 +63,17 @@ export default class PrinterPane extends Component {
 		);
 	}
 
-	renderLine = (state, i) => {
-		const output = state.cpu.output;
-		if (!output) return;
-
+	renderLine = (line, i) => {
 		return (
 			<Layout key={i} style={this.style.line} dir="horizontal">
 				<div style={this.style.lineHex}>
-					{hexString(state.cpu.output)}
+					{hexString(line)}
 				</div>
 				<div style={this.style.lineChar}>
-					{String.fromCharCode(state.cpu.output)}
+					{String.fromCharCode(line)}
 				</div>
 				<div style={this.style.lineBinary}>
-					{bitString(state.cpu.output, 8, '  ', '▓▓')}
+					{bitString(line, 8, '  ', '▓▓')}
 				</div>
 			</Layout>
 		);

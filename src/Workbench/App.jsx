@@ -120,7 +120,6 @@ export default class App extends Component {
 		const {interval, running} = this.state;
 		const history = this.state.history;
 		const current = this.state.currentSnapshot;
-		const currentHistory = history.slice(0, current+1);
 		const system = this.getCurrentSnapshot();
 
 		return (
@@ -140,7 +139,7 @@ export default class App extends Component {
 							pc={system.cpu.pc}/>
 						<Layout dir="vertical" size={275}>
 							<CPUPane cpu={system.cpu}/>
-							<PrinterPane history={currentHistory}/>
+							<PrinterPane printer={system.printer}/>
 						</Layout>
 					</Layout>
 					<Timer interval={interval}

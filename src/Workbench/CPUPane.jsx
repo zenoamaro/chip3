@@ -79,6 +79,10 @@ export default class CPUPane extends Component {
 						hint: 'Address Register',
 						value: cpu.ar})}
 					{this.renderProp({
+						label: 'OR',
+						hint: 'Output Register',
+						value: cpu.or})}
+					{this.renderProp({
 						label: 'LR',
 						hint: 'Last load address Register',
 						value: cpu.ar})}
