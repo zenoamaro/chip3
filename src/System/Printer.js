@@ -9,9 +9,9 @@
  * A printer in a virgin state.
  *
  * @typedef  {Device}  Printer
- * @property {Boolean}  rst    - Reset flag 
- * @property {Boolean}  output - Output request 
- * @property {Number}   or     - CPU output register 
+ * @property {Boolean}  rst    - Reset flag
+ * @property {Boolean}  output - Output request
+ * @property {Number}   or     - Output value register
  * @property {Number[]} paper  - The full printout
  */
 
@@ -25,8 +25,8 @@
 export function create() {
 	return {
 		output: false,
-    or: 0,
-    paper: [],
+		or: 0,
+		paper: [],
 	};
 }
 
@@ -43,7 +43,10 @@ export function cycle(state) {
 		case state.output: receiver = print; break;
 		default:           return {...state};
 	}
-	return {...state, ...receiver(state)};
+	return {
+		...state,
+		...receiver(state),
+	};
 }
 
 /**
@@ -57,7 +60,7 @@ function print(state) {
 	return {
 		paper: [
 			...state.paper,
-			state.or
+			state.or,
 		],
 	};
 }
@@ -71,5 +74,5 @@ function print(state) {
 export function toString(state) {
 	const rst = state.rst? 'on' : 'off';
 	const output = state.output? 'on' : 'off';
-	return `Printer RST:${rst} OUTPUT:${output} OR:${state.or}`;
+	return `Printer RST:${rst} output:${output} OR:${state.or}`;
 }

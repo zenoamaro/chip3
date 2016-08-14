@@ -12,10 +12,10 @@ import * as Printer from './Printer';
 /**
  * A system in a virgin state.
  *
- * @typedef  {Object} System
- * @property {CPU}     cpu     - CPU component
- * @property {RAM}     ram     - RAM component
- * @property {Printer} printer - Printer component
+ * @typedef  {Object}  System
+ * @property {CPU}     cpu     - CPU device
+ * @property {RAM}     ram     - RAM device
+ * @property {Printer} printer - Printer device
  * @property {Number}  cycle   - Current cycle number
  */
 
@@ -76,7 +76,7 @@ export function create() {
 }
 
 /**
- * Executes one system cycle by cycling components, and returning the
+ * Executes one system cycle by cycling devices, and returning the
  * new state.
  *
  * @param   {System} state
