@@ -28,18 +28,51 @@ import * as Printer from './Printer';
 
 
 /**
+ * Specification for a system bus.
+ *
+ * This bus specifies the order of creation and execution of devices in the
+ * system, and which lines will be synchronized between devices after each
+ * device has cycled.
+ *
+ * @typedef  {Array}    Bus
+ * @property {String}   Bus[].id     - ID of device in the bus
+ * @property {Module}   Bus[].device - Module of device to instantiate
+ * @property {Array}    Bus[].lines  - Synchronization lines to other devices
+ */
+export const Bus = [{
+	id: 'cpu',
+	device: CPU,
+	lines: {
+		ram: ['read', 'write', 'ar', 'dr'],
+		printer: ['output', 'or'],
+	},
+}, {
+	id: 'ram',
+	device: RAM,
+	lines: {
+		cpu: ['dr'],
+	},
+}, {
+	id: 'printer',
+	device: Printer,
+	lines: {},
+}];
+
+
+/**
  * Create a system in a virgin state.
  *
  * @method create
  * @returns {System}
  */
 export function create() {
-	return {
-		cpu: CPU.create(),
-		ram: RAM.create(),
-		printer: Printer.create(),
-		cycle: 1,
+	const system = {
+		cycle: 0,
 	};
+	for (const {id, device} of Bus) {
+		system[id] = device.create();
+	}
+	return system;
 }
 
 /**
@@ -50,31 +83,19 @@ export function create() {
  * @returns {System}
  */
 export function cycle(state) {
-	let {cpu, ram, printer} = state;
-	cpu = CPU.cycle(cpu);
-	ram = RAM.cycle(synchronize(ram, cpu, ['read', 'write', 'ar', 'dr']));
-	cpu = synchronize(cpu, ram, ['dr']);
-	printer = Printer.cycle(synchronize(printer, cpu, ['output', 'or']));
-	return {...state, cpu, ram, printer, cycle:state.cycle+1};
-}
-
-/**
- * Returns a copy of the receiver, where all the specified lines will have the
- * same value as those on the source.
- *
- * @param   {Device}   receiver
- * @param   {Device}   source
- * @param   {String[]} lines
- * @returns {Device}
- */
-export function synchronize(receiver, source, lines) {
-	return lines.reduce(
-		(receiver, line) => {
-			receiver[line] = source[line];
-			return receiver;
-		},
-		{...receiver},
-	);
+	state = {
+		...state,
+		cycle: state.cycle + 1,
+	};
+	for (const {id, device, lines} of Bus) {
+		state[id] = device.cycle(state[id]);
+		for (const [target, mapping] of Object.entries(lines)) {
+			for (const line of mapping) {
+				state[target][line] = state[id][line];
+			}
+		}
+	}
+	return state;
 }
 
 /**
@@ -84,7 +105,7 @@ export function synchronize(receiver, source, lines) {
  * @returns {String}
  */
 export function toString(state) {
-	return `${state.cycle}\t${CPU.toString(state.cpu)}\n`
-	     + `\t${RAM.toString(state.ram)}\n`
-	     + `\t${Printer.toString(state.printer)}`;
+	return `${state.cycle}${Bus.map(
+		({id, device}) => `\t\t${device.toString(state[id])}\n`
+	)}`;
 }
