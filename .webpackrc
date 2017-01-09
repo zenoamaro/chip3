@@ -32,15 +32,15 @@ module.exports = {
 		loaders: [{
 			test: /\.jsx?$/,
 			include: d('src'),
-			loaders: ['babel'],
+			loaders: ['babel-loader'],
 		}, {
 			test: /\.json$/,
-			loaders: ['json'],
+			loaders: ['json-loader'],
 		}, {
 			test: /\.(png|svg|html|css)$/,
 			include: d('src/Workbench'),
 			loaders: [
-				'file?context=./src/Workbench&name=[name].[ext]?[hash:10]',
+				'file-loader?context=./src/Workbench&name=[name].[ext]?[hash:10]',
 			]
 		}]
 	},
@@ -82,7 +82,6 @@ module.exports = {
 			'onBuildStart': "open 'http://localhost:8080'",
 		}),
 	] : [
-		new webpack.optimize.DedupePlugin(),
 		new webpack.optimize.UglifyJsPlugin({
 			comments: /\/\/#/, // Keep only source maps
 			compress: { warnings: false },

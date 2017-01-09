@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Chip3 Workbench</title>
+	<meta name="language" content="en">
+	<meta name="author" content="zenoamaro@gmail.com">
+	<meta name="description" content="Chip3 is an interactive emulator of a simple computer for educational purposes.">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		* { box-sizing:border-box }
+		html { font-family:-webkit-system-font,sans-serif; font-size:12px;
+		       text-rendering: optimizeLegibility; color:#333 }
+		body { margin: 0 }
+		input, button { color:inherit; font-family:inherit; font-size:inherit }
+	</style>
+</head>
+<body>
+	<div id="workbench">Loading...</div>
+	<script src="chip3.js"></script>
+	<script>(function(){
+
+var library = {
+
+	helloWorld: `
+		; Hello world
+		; -----------
+		; This program reads the string "Hello!" from memory and outputs
+		; each character to the printer until it reaches the terminator.
+
+		start:    LD [offset]         ; Increment offset
+		          INC                 ;
+		          STA                 ;
+		          LDA                 ; Load at offset
+		          JZ [end]            ; End on string terminator
+		          OUT                 ;
+		          JMP [start]         ;
+		end:      JMP [end]           ; Halt
+		message:  DB "Hello, world!"  ;
+		offset:   DB [end]            ; [message-1] ;)
+	`,
+
+	bouncyBits: `
+		; Bouncy bits
+		; -----------
+		; This program bounces a single bit inside the accumulator to the
+		; left and to the right, changing direction whenever it hits the
+		; bounds of the register.
+
+		init:        LD [current]      ; Initial ball position
+		output:      OUT               ; Print ball position
+		bounds:      AND [first_last]  ; Is on first or last position?
+		             JZ [move]         ; If not, move
+		reverse:     LD [direction]    ;
+		             NOT               ; Invert direction
+		             ST [direction]    ;
+		move:        LD [direction]    ;
+		             JZ [right]        ; 0=right, 1=left
+		left:        LD [current]      ;
+		             ROL               ; Shift left
+		             JMP [store]       ;
+		right:       LD [current]      ;
+		             ROR               ; Shift right
+		store:       ST [current]      ;
+		             JMP [output]      ; Loop
+		direction:   DB 255            ; Current direction, 0=right, 1=left
+		current:     DB 128            ; Current position
+		first_last:  DB 129            ; First and last positions
+	`,
+
+};
+
+Chip3.Workbench.App.bootstrap('#workbench', {
+	program: Chip3.Assembler.Assembler.assembleSource(
+		library.helloWorld
+	)
+});
+
+	})(this)</script>
+</body>
+</html>
